@@ -30,7 +30,7 @@ function PromoSlider() {
       setActiveSlide((currentSlide) => {
         const nextSlide = (currentSlide + 1) % promoSlides.length
         sliderRef.current?.scrollTo({
-          left: nextSlide * sliderRef.current.clientWidth,
+          top: nextSlide * sliderRef.current.clientHeight,
           behavior: 'smooth',
         })
 
@@ -42,8 +42,8 @@ function PromoSlider() {
   }, [])
 
   function handleScroll(event) {
-    const slideWidth = event.currentTarget.clientWidth
-    const nextSlide = Math.round(event.currentTarget.scrollLeft / slideWidth)
+    const slideHeight = event.currentTarget.clientHeight
+    const nextSlide = Math.round(event.currentTarget.scrollTop / slideHeight)
 
     setActiveSlide(Math.min(nextSlide, promoSlides.length - 1))
   }

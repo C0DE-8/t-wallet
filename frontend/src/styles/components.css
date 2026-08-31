@@ -90,10 +90,11 @@
 }
 
 .promo-slider {
-  display: flex;
+  display: grid;
+  height: 48px;
   min-width: 0;
-  overflow-x: auto;
-  scroll-snap-type: x mandatory;
+  overflow-y: auto;
+  scroll-snap-type: y mandatory;
   scrollbar-width: none;
 }
 
@@ -103,7 +104,7 @@
 
 .promo-slide {
   display: grid;
-  flex: 0 0 100%;
+  min-height: 48px;
   grid-template-columns: 46px minmax(0, 1fr);
   align-items: center;
   gap: 12px;
@@ -420,7 +421,12 @@
 
   .promo-slide {
     grid-template-columns: 40px minmax(0, 1fr);
+    min-height: 42px;
     gap: 10px;
+  }
+
+  .promo-slider {
+    height: 42px;
   }
 
   .promo-icon {
