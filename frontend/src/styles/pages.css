@@ -1,10 +1,10 @@
 .wallets-screen {
-  padding: 28px 16px 0;
+  padding: 24px 14px 0;
 }
 
 .wallets-header {
   display: grid;
-  grid-template-columns: 48px 1fr 48px;
+  grid-template-columns: 42px 1fr 42px;
   align-items: center;
   gap: 12px;
 }
@@ -12,28 +12,28 @@
 .wallets-header h1 {
   margin: 0;
   text-align: center;
-  font-size: 22px;
+  font-size: 20px;
 }
 
 .wallet-choice-sheet {
   position: absolute;
-  right: 8px;
-  bottom: 10px;
-  left: 8px;
-  min-height: 58svh;
-  padding: 24px 28px 34px;
-  border-radius: 36px;
+  right: 6px;
+  bottom: 8px;
+  left: 6px;
+  min-height: min(56svh, 460px);
+  padding: 20px 22px 28px;
+  border-radius: 30px;
   background: #202235;
   box-shadow: 0 -22px 80px rgba(0, 0, 0, 0.4);
 }
 
 .sheet-close {
   position: absolute;
-  top: 18px;
-  right: 18px;
+  top: 16px;
+  right: 16px;
   display: grid;
-  width: 52px;
-  height: 52px;
+  width: 42px;
+  height: 42px;
   place-items: center;
   border: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: 50%;
@@ -49,18 +49,18 @@
 
 .wallet-illustration {
   display: block;
-  width: min(76%, 250px);
+  width: min(68%, 212px);
   height: auto;
-  margin: 54px auto 30px;
+  margin: 44px auto 24px;
 }
 
 .option-row {
   display: grid;
   width: 100%;
-  grid-template-columns: 64px 1fr 20px;
+  grid-template-columns: 52px minmax(0, 1fr) 18px;
   align-items: center;
-  gap: 16px;
-  padding: 18px 0;
+  gap: 12px;
+  padding: 14px 0;
   border: 0;
   text-align: left;
   color: #ffffff;
@@ -70,17 +70,22 @@
 .option-row strong {
   display: block;
   color: #ffffff;
+  font-size: 15px;
   font-weight: 800;
 }
 
 .option-row small {
+  display: block;
+  min-width: 0;
   color: #999dad;
+  font-size: 12px;
+  line-height: 1.3;
 }
 
 .option-icon {
   display: grid;
-  width: 54px;
-  height: 54px;
+  width: 48px;
+  height: 48px;
   place-items: center;
   border-radius: 50%;
   background: #4a37ff;
@@ -111,7 +116,8 @@
 .dashboard-content {
   height: 100%;
   overflow-y: auto;
-  padding: 18px 16px 116px;
+  overflow-x: hidden;
+  padding: 18px 14px 106px;
   scrollbar-width: none;
 }
 
@@ -123,39 +129,42 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 10px;
+  min-width: 0;
 }
 
 .balance-pill {
   display: inline-flex;
-  min-width: 146px;
-  height: 50px;
+  min-width: 0;
+  height: 44px;
   align-items: center;
-  gap: 10px;
+  gap: 9px;
   border: 0;
   border-radius: 999px;
   color: #ffffff;
   background: #1d2133;
-  padding: 0 16px 0 10px;
-  font-size: 16px;
+  padding: 0 14px 0 8px;
+  font-size: 15px;
 }
 
 .wallet-glyph {
   display: grid;
-  width: 36px;
-  height: 36px;
+  width: 32px;
+  height: 32px;
   place-items: center;
   border-radius: 50%;
   background: #4b3cff;
 }
 
 .wallet-glyph svg {
-  width: 24px;
-  height: 24px;
+  width: 21px;
+  height: 21px;
 }
 
 .top-actions {
   display: flex;
-  gap: 10px;
+  flex: 0 0 auto;
+  gap: 8px;
 }
 
 .portfolio-change {
@@ -165,7 +174,7 @@
 .portfolio {
   display: block;
   width: 100%;
-  margin-top: 30px;
+  margin-top: 28px;
   padding: 0;
   border: 0;
   color: inherit;
@@ -176,22 +185,22 @@
 .portfolio-value {
   margin: 0;
   color: #ffffff;
-  font-size: clamp(38px, 11vw, 46px);
+  font-size: clamp(40px, 11vw, 44px);
   line-height: 1;
   font-weight: 900;
 }
 
 .portfolio-change {
-  margin: 14px 0 0;
-  font-size: 17px;
+  margin: 12px 0 0;
+  font-size: 16px;
   font-weight: 700;
 }
 
 .quick-actions {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 16px;
-  margin-top: 42px;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 38px;
 }
 
 @media (max-width: 410px) {
@@ -234,23 +243,22 @@
   }
 
   .dashboard-content {
-    padding: 16px 14px 108px;
+    padding: 16px 14px 102px;
   }
 
   .icon-button {
-    width: 44px;
-    height: 44px;
+    width: 40px;
+    height: 40px;
   }
 
   .balance-pill {
-    min-width: 132px;
-    height: 46px;
+    height: 42px;
     font-size: 15px;
   }
 
   .wallet-glyph {
-    width: 34px;
-    height: 34px;
+    width: 31px;
+    height: 31px;
   }
 
   .portfolio {
@@ -263,8 +271,8 @@
   }
 
   .quick-actions {
-    gap: 12px;
-    margin-top: 38px;
+    gap: 10px;
+    margin-top: 36px;
   }
 }
 

@@ -1,6 +1,7 @@
 .action-button {
   display: grid;
-  gap: 10px;
+  min-width: 0;
+  gap: 9px;
   justify-items: center;
   border: 0;
   color: #ffffff;
@@ -9,12 +10,13 @@
 
 .action-button span {
   display: grid;
-  width: 74px;
-  height: 58px;
+  width: 100%;
+  max-width: 72px;
+  height: 56px;
   place-items: center;
-  border-radius: 16px;
+  border-radius: 15px;
   background: #1c2030;
-  font-size: 30px;
+  font-size: 28px;
   font-weight: 900;
 }
 
@@ -23,7 +25,12 @@
 }
 
 .action-button strong {
-  font-size: 15px;
+  max-width: 100%;
+  overflow: hidden;
+  font-size: 14px;
+  line-height: 1.15;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .action-button svg {
@@ -33,12 +40,17 @@
 
 .token-icon {
   display: grid;
-  width: 50px;
-  height: 50px;
+  width: 48px;
+  height: 48px;
   place-items: center;
   border-radius: 50%;
   color: #ffffff;
   font-weight: 900;
+}
+
+.token-icon svg {
+  width: 64%;
+  height: 64%;
 }
 
 .token-icon.teal {
@@ -79,10 +91,10 @@
   display: grid;
   grid-template-columns: 8px minmax(0, 1fr);
   align-items: center;
-  gap: 12px;
-  min-height: 72px;
+  gap: 8px;
+  min-height: 70px;
   margin-top: 26px;
-  padding: 12px 16px;
+  padding: 11px 12px;
   border: 1px solid #30354b;
   border-radius: 18px;
   background: rgba(10, 13, 22, 0.78);
@@ -105,15 +117,15 @@
 .promo-slide {
   display: grid;
   min-height: 48px;
-  grid-template-columns: 46px minmax(0, 1fr);
+  grid-template-columns: 32px minmax(0, 1fr);
   align-items: center;
-  gap: 12px;
+  gap: 8px;
   scroll-snap-align: start;
 }
 
 .promo-progress {
   display: grid;
-  gap: 4px;
+  gap: 3px;
   justify-items: center;
 }
 
@@ -131,8 +143,8 @@
 }
 
 .promo-icon {
-  width: 44px;
-  height: 44px;
+  width: 30px;
+  height: 30px;
   object-fit: contain;
 }
 
@@ -146,27 +158,25 @@
 }
 
 .promo-copy strong {
-  overflow: hidden;
   color: #ffffff;
-  font-size: clamp(14px, 3.5vw, 15px);
-  line-height: 1.2;
+  font-size: 13px;
+  line-height: 1.18;
   font-weight: 800;
-  text-overflow: ellipsis;
   white-space: nowrap;
 }
 
 .promo-copy span {
-  margin-top: 2px;
+  margin-top: 3px;
   overflow: hidden;
   color: #999dad;
-  font-size: clamp(13px, 3.3vw, 15px);
+  font-size: 13px;
   line-height: 1.2;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
 .stack-section {
-  margin-top: 34px;
+  margin-top: 32px;
   text-align: left;
 }
 
@@ -174,40 +184,49 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  margin: 0 0 18px;
+  margin: 0 0 17px;
   color: #ffffff;
   font-size: 19px;
 }
 
 .asset-list {
   display: grid;
-  gap: 22px;
+  gap: 20px;
 }
 
 .asset-row {
   display: grid;
-  grid-template-columns: 58px 1fr auto;
+  grid-template-columns: 54px minmax(0, 1fr) minmax(72px, auto);
   align-items: center;
-  gap: 12px;
+  gap: 10px;
+  min-width: 0;
 }
 
 .asset-copy,
 .asset-value {
   display: grid;
+  min-width: 0;
   gap: 3px;
 }
 
 .asset-copy strong,
 .asset-value strong {
   display: block;
+  overflow: hidden;
   color: #ffffff;
-  font-size: 18px;
+  font-size: 17px;
   font-weight: 800;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .asset-copy span,
 .asset-value span {
+  overflow: hidden;
   color: #999dad;
+  font-size: 14px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .asset-value {
@@ -216,12 +235,12 @@
 
 .view-all {
   display: inline-flex;
-  min-width: 118px;
-  height: 54px;
+  min-width: 112px;
+  height: 50px;
   align-items: center;
   justify-content: center;
   gap: 12px;
-  margin-top: 28px;
+  margin-top: 26px;
   border: 0;
   border-radius: 999px;
   color: #ffffff;
@@ -230,15 +249,15 @@
 }
 
 .clip-section {
-  margin-right: -16px;
+  margin-right: -14px;
   overflow: hidden;
 }
 
 .card-row {
   display: flex;
-  gap: 14px;
+  gap: 12px;
   overflow-x: auto;
-  padding-right: 16px;
+  padding-right: 14px;
   scrollbar-width: none;
 }
 
@@ -248,9 +267,9 @@
 
 .market-card,
 .prediction-card {
-  flex: 0 0 178px;
-  min-height: 128px;
-  padding: 22px;
+  flex: 0 0 166px;
+  min-height: 122px;
+  padding: 18px;
   border-radius: 8px;
   background: #1c2030;
 }
@@ -262,7 +281,7 @@
 }
 
 .market-card .token-icon {
-  margin-bottom: 18px;
+  margin-bottom: 14px;
 }
 
 .market-card strong,
@@ -315,8 +334,8 @@
   align-items: center;
   justify-content: space-between;
   gap: 14px;
-  margin-top: 26px;
-  padding: 14px 16px;
+  margin-top: 24px;
+  padding: 12px 14px;
   border: 0;
   border-radius: 14px;
   background: #202436;
@@ -332,8 +351,8 @@
 }
 
 .trust-ai button {
-  height: 44px;
-  padding: 0 18px;
+  height: 40px;
+  padding: 0 14px;
   border: 0;
   border-radius: 999px;
   color: #ffffff;
@@ -342,7 +361,7 @@
 }
 
 .watchlist {
-  padding-bottom: 34px;
+  padding-bottom: 28px;
 }
 
 .watchlist .asset-row {
@@ -359,18 +378,18 @@
 
 .bottom-nav {
   position: absolute;
-  right: 16px;
-  bottom: 12px;
-  left: 16px;
+  right: 12px;
+  bottom: 10px;
+  left: 12px;
   display: grid;
-  grid-template-columns: 1fr 64px;
-  gap: 12px;
+  grid-template-columns: minmax(0, 1fr) 58px;
+  gap: 10px;
   align-items: center;
 }
 
 .nav-group {
   display: grid;
-  height: 68px;
+  height: 60px;
   grid-template-columns: repeat(4, 1fr);
   align-items: center;
   padding: 4px;
@@ -383,7 +402,7 @@
 
 .bottom-nav button {
   display: grid;
-  height: 58px;
+  height: 50px;
   place-items: center;
   border: 0;
   border-radius: 999px;
@@ -393,8 +412,8 @@
 }
 
 .bottom-nav svg {
-  width: 24px;
-  height: 24px;
+  width: 22px;
+  height: 22px;
 }
 
 .bottom-nav .selected {
@@ -402,7 +421,7 @@
 }
 
 .search-fab {
-  width: 64px;
+  width: 58px;
   border: 1px solid #2f354b !important;
   background: rgba(9, 11, 18, 0.86) !important;
   box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.3);
@@ -412,35 +431,39 @@
 @media (max-width: 370px) {
   .promo-card {
     grid-template-columns: 7px minmax(0, 1fr);
-    gap: 10px;
-    min-height: 66px;
+    gap: 8px;
+    min-height: 74px;
     margin-top: 22px;
     padding: 10px 12px;
     border-radius: 16px;
   }
 
   .promo-slide {
-    grid-template-columns: 40px minmax(0, 1fr);
-    min-height: 42px;
-    gap: 10px;
+    grid-template-columns: 30px minmax(0, 1fr);
+    min-height: 54px;
+    gap: 8px;
   }
 
   .promo-slider {
-    height: 42px;
+    height: 54px;
   }
 
   .promo-icon {
-    width: 38px;
-    height: 38px;
+    width: 28px;
+    height: 28px;
+  }
+
+  .promo-copy strong {
+    white-space: normal;
   }
 
   .promo-progress span.active {
-    height: 18px;
+    height: 20px;
   }
 
   .action-button span {
-    width: 62px;
-    height: 52px;
+    max-width: 64px;
+    height: 50px;
     border-radius: 14px;
   }
 
@@ -467,13 +490,13 @@
   }
 
   .asset-row {
-    grid-template-columns: 52px 1fr auto;
+    grid-template-columns: 50px minmax(0, 1fr) minmax(68px, auto);
     gap: 10px;
   }
 
   .token-icon {
-    width: 46px;
-    height: 46px;
+    width: 44px;
+    height: 44px;
   }
 
   .asset-copy strong,
@@ -520,23 +543,23 @@
   }
 
   .bottom-nav {
-    right: 12px;
+    right: 10px;
     bottom: 10px;
-    left: 12px;
-    grid-template-columns: 1fr 58px;
-    gap: 10px;
+    left: 10px;
+    grid-template-columns: minmax(0, 1fr) 54px;
+    gap: 8px;
   }
 
   .nav-group {
-    height: 62px;
+    height: 58px;
   }
 
   .bottom-nav button {
-    height: 52px;
+    height: 48px;
   }
 
   .search-fab {
-    width: 58px;
+    width: 54px;
   }
 }
 

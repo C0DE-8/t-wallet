@@ -9,7 +9,7 @@ function Watchlist() {
       </h2>
       {watchlist.map((item) => (
         <div className="asset-row" key={item.name}>
-          <TokenIcon tone={item.tone} label={item.name.slice(0, 3)} />
+          <TokenIcon tone={item.tone} label={item.ticker} />
           <div className="asset-copy">
             <strong>{item.name}</strong>
           </div>

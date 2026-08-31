@@ -15,6 +15,7 @@
 }
 
 html {
+  overflow-x: hidden;
   background: #030407;
 }
 
@@ -22,6 +23,7 @@ body {
   min-width: 320px;
   min-height: 100svh;
   margin: 0;
+  overflow-x: hidden;
   background: #030407;
 }
 

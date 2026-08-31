@@ -1,6 +1,7 @@
 .app-screen {
   position: relative;
-  width: min(100vw, 430px);
+  width: 100%;
+  max-width: 390px;
   min-height: 100svh;
   margin: 0 auto;
   overflow: hidden;
@@ -14,8 +15,8 @@ button {
 
 .icon-button {
   display: grid;
-  width: 48px;
-  height: 48px;
+  width: 42px;
+  height: 42px;
   place-items: center;
   border: 0;
   border-radius: 50%;
@@ -25,11 +26,11 @@ button {
 }
 
 .icon-button svg {
-  width: 24px;
-  height: 24px;
+  width: 22px;
+  height: 22px;
 }
 
-@media (min-width: 431px) {
+@media (min-width: 391px) {
   body {
     background: #030407;
   }
