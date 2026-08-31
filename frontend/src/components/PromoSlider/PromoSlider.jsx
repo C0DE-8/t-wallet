@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import bStocksIcon from '../../assets/icons/bstocks.png'
 import exploreIcon from '../../assets/icons/explore.png'
 import swapIcon from '../../assets/icons/swap.png'
@@ -22,17 +22,31 @@ const promoSlides = [
 ]
 
 function PromoSlider() {
+  const sliderRef = useRef(null)
   const [activeSlide, setActiveSlide] = useState(0)
 
   useEffect(() => {
     const timer = window.setInterval(() => {
-      setActiveSlide((currentSlide) => (currentSlide + 1) % promoSlides.length)
-    }, 3500)
+      setActiveSlide((currentSlide) => {
+        const nextSlide = (currentSlide + 1) % promoSlides.length
+        sliderRef.current?.scrollTo({
+          left: nextSlide * sliderRef.current.clientWidth,
+          behavior: 'smooth',
+        })
+
+        return nextSlide
+      })
+    }, 8000)
 
     return () => window.clearInterval(timer)
   }, [])
 
-  const slide = promoSlides[activeSlide]
+  function handleScroll(event) {
+    const slideWidth = event.currentTarget.clientWidth
+    const nextSlide = Math.round(event.currentTarget.scrollLeft / slideWidth)
+
+    setActiveSlide(Math.min(nextSlide, promoSlides.length - 1))
+  }
 
   return (
     <section className="promo-card" aria-label="Promotions">
@@ -44,10 +58,16 @@ function PromoSlider() {
           ></span>
         ))}
       </div>
-      <img className="promo-icon" src={slide.icon} alt="" />
-      <div className="promo-copy">
-        <strong>{slide.title}</strong>
-        <span>{slide.subtitle}</span>
+      <div className="promo-slider" ref={sliderRef} onScroll={handleScroll}>
+        {promoSlides.map((slide) => (
+          <article className="promo-slide" key={slide.title}>
+            <img className="promo-icon" src={slide.icon} alt="" />
+            <div className="promo-copy">
+              <strong>{slide.title}</strong>
+              <span>{slide.subtitle}</span>
+            </div>
+          </article>
+        ))}
       </div>
     </section>
   )

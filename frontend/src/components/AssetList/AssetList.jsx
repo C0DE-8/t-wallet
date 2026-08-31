@@ -1,7 +1,7 @@
 import { assets } from '../../data/walletData'
 import TokenIcon from '../TokenIcon/TokenIcon'
 
-function AssetList() {
+function AssetList({ hideBalances }) {
   return (
     <section className="stack-section">
       <h2>
@@ -13,11 +13,11 @@ function AssetList() {
             <TokenIcon tone={asset.tone} label={asset.ticker} />
             <div className="asset-copy">
               <strong>{asset.name}</strong>
-              <span>{asset.amount}</span>
+              <span>{hideBalances ? '*****' : asset.amount}</span>
             </div>
             <div className="asset-value">
-              <strong>{asset.value}</strong>
-              <span>$0.00</span>
+              <strong>{hideBalances ? '*****' : asset.value}</strong>
+              <span>{hideBalances ? '*****' : '$0.00'}</span>
             </div>
           </div>
         ))}

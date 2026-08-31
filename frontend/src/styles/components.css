@@ -77,7 +77,7 @@
 
 .promo-card {
   display: grid;
-  grid-template-columns: 8px 52px 1fr;
+  grid-template-columns: 8px minmax(0, 1fr);
   align-items: center;
   gap: 12px;
   min-height: 72px;
@@ -87,6 +87,27 @@
   border-radius: 18px;
   background: rgba(10, 13, 22, 0.78);
   text-align: left;
+}
+
+.promo-slider {
+  display: flex;
+  min-width: 0;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+}
+
+.promo-slider::-webkit-scrollbar {
+  display: none;
+}
+
+.promo-slide {
+  display: grid;
+  flex: 0 0 100%;
+  grid-template-columns: 46px minmax(0, 1fr);
+  align-items: center;
+  gap: 12px;
+  scroll-snap-align: start;
 }
 
 .promo-progress {
@@ -109,8 +130,8 @@
 }
 
 .promo-icon {
-  width: 46px;
-  height: 46px;
+  width: 44px;
+  height: 44px;
   object-fit: contain;
 }
 
@@ -126,7 +147,7 @@
 .promo-copy strong {
   overflow: hidden;
   color: #ffffff;
-  font-size: 16px;
+  font-size: 15px;
   line-height: 1.2;
   font-weight: 800;
   text-overflow: ellipsis;
