@@ -14,7 +14,18 @@ import TrustAi from '../../components/TrustAi/TrustAi'
 import Watchlist from '../../components/Watchlist/Watchlist'
 
 function WalletDashboard() {
-  const [hideBalances, setHideBalances] = useState(true)
+  const [hideBalances, setHideBalances] = useState(() => {
+    return window.localStorage.getItem('trust-wallet-hide-balances') === 'true'
+  })
+
+  function toggleBalances() {
+    setHideBalances((isHidden) => {
+      const nextValue = !isHidden
+      window.localStorage.setItem('trust-wallet-hide-balances', String(nextValue))
+
+      return nextValue
+    })
+  }
 
   return (
     <main className="app-screen dashboard-screen">
@@ -23,8 +34,6 @@ function WalletDashboard() {
           <button
             className="balance-pill"
             type="button"
-            onClick={() => setHideBalances((isHidden) => !isHidden)}
-            aria-label={hideBalances ? 'Show balances' : 'Hide balances'}
           >
             <span className="wallet-glyph">
               <IoWallet />
@@ -43,10 +52,15 @@ function WalletDashboard() {
 
         <PromoSlider />
 
-        <section className="portfolio">
+        <button
+          className="portfolio"
+          type="button"
+          onClick={toggleBalances}
+          aria-label={hideBalances ? 'Show balances' : 'Hide balances'}
+        >
           <p className="portfolio-value">{hideBalances ? '*****' : '$120.58'}</p>
           <p className="portfolio-change">{hideBalances ? '*****' : '$0.00 (0.00%)'}</p>
-        </section>
+        </button>
 
         <section className="quick-actions" aria-label="Wallet actions">
           <ActionButton label="Send" icon={<FiArrowUpRight />} />
