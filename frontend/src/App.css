@@ -24,6 +24,17 @@ button {
   font-weight: 800;
 }
 
+.icon-button svg,
+.sheet-close svg,
+.more-button svg,
+.option-icon svg,
+.wallet-glyph svg,
+.action-button svg,
+.bottom-nav svg {
+  width: 24px;
+  height: 24px;
+}
+
 .wallets-screen {
   padding: 28px 16px 0;
 }
@@ -128,55 +139,11 @@ button {
 }
 
 .wallet-illustration {
-  position: relative;
-  width: 210px;
-  height: 170px;
-  margin: 48px auto 28px;
-}
-
-.wallet-illustration span {
-  position: absolute;
   display: block;
-}
-
-.device {
-  right: 42px;
-  bottom: 22px;
-  width: 104px;
-  height: 76px;
-  border-radius: 14px;
-  background: linear-gradient(135deg, #38ff9b, #f3fb48);
-  transform: rotate(8deg);
-}
-
-.coin {
-  top: 38px;
-  left: 80px;
-  width: 52px;
-  height: 52px;
-  border-radius: 50%;
-  background: linear-gradient(145deg, #0938ff, #6549ff);
-}
-
-.orbit {
-  width: 86px;
-  height: 24px;
-  border: 4px solid #7567ff;
-  border-radius: 50%;
-}
-
-.orbit.one {
-  top: 68px;
-  left: 34px;
-  border-color: #48f6c4;
-  transform: rotate(22deg);
-}
-
-.orbit.two {
-  top: 44px;
-  right: 22px;
-  border-color: #ffe76a;
-  transform: rotate(-24deg);
+  width: min(76%, 250px);
+  height: auto;
+  margin: 54px auto 30px;
+  mix-blend-mode: screen;
 }
 
 .option-row {
@@ -249,8 +216,10 @@ button {
 }
 
 .wallet-glyph {
+  display: grid;
   width: 36px;
   height: 36px;
+  place-items: center;
   border-radius: 50%;
   background: #4b3cff;
 }
@@ -527,6 +496,12 @@ button {
   border: 0;
   border-radius: 14px;
   background: #202436;
+}
+
+.trust-ai strong {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .trust-ai button {

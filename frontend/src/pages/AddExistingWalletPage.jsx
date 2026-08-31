@@ -1,5 +1,14 @@
 import { useNavigate } from 'react-router-dom'
+import { BsThreeDotsVertical } from 'react-icons/bs'
+import {
+  IoChevronForward,
+  IoClose,
+  IoDownloadOutline,
+  IoSettingsOutline,
+  IoSparkles,
+} from 'react-icons/io5'
 import TokenIcon from '../components/TokenIcon'
+import walletIllustration from '../assets/icons/wallet.png'
 
 function AddExistingWalletPage() {
   const navigate = useNavigate()
@@ -8,11 +17,11 @@ function AddExistingWalletPage() {
     <main className="app-screen wallets-screen">
       <header className="wallets-header">
         <button className="icon-button" type="button" aria-label="Close">
-          X
+          <IoClose />
         </button>
         <h1>Wallets</h1>
         <button className="icon-button" type="button" aria-label="Settings">
-          *
+          <IoSettingsOutline />
         </button>
       </header>
 
@@ -25,7 +34,7 @@ function AddExistingWalletPage() {
             <span>Multi-coin wallet</span>
           </div>
           <button className="more-button" type="button" aria-label="Wallet options">
-            ...
+            <BsThreeDotsVertical />
           </button>
         </div>
         <button className="backup-link" type="button">
@@ -35,29 +44,28 @@ function AddExistingWalletPage() {
 
       <section className="wallet-choice-sheet" aria-label="Wallet setup options">
         <button className="sheet-close" type="button" aria-label="Close">
-          X
+          <IoClose />
         </button>
-        <div className="wallet-illustration" aria-hidden="true">
-          <span className="orbit one"></span>
-          <span className="orbit two"></span>
-          <span className="device"></span>
-          <span className="coin"></span>
-        </div>
+        <img className="wallet-illustration" src={walletIllustration} alt="" />
         <button className="option-row" type="button">
-          <span className="option-icon">+</span>
+          <span className="option-icon">
+            <IoSparkles />
+          </span>
           <span>
             <strong>Create new wallet</strong>
             <small>Secret phrase or FaceID / fingerprint</small>
           </span>
-          <span className="chevron">&gt;</span>
+          <IoChevronForward className="chevron" />
         </button>
         <button className="option-row" type="button" onClick={() => navigate('/wallet')}>
-          <span className="option-icon download">v</span>
+          <span className="option-icon download">
+            <IoDownloadOutline />
+          </span>
           <span>
             <strong>Add existing wallet</strong>
             <small>Secret phrase, iCloud or view-only</small>
           </span>
-          <span className="chevron">&gt;</span>
+          <IoChevronForward className="chevron" />
         </button>
       </section>
     </main>

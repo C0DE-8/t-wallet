@@ -1,3 +1,5 @@
+import { FiArrowDown, FiArrowUpRight, FiPlus } from 'react-icons/fi'
+import { IoScan, IoSwapHorizontal, IoTimeOutline, IoWallet } from 'react-icons/io5'
 import ActionButton from '../components/ActionButton'
 import AssetList from '../components/AssetList'
 import BottomNav from '../components/BottomNav'
@@ -11,21 +13,23 @@ function WalletDashboard() {
       <div className="dashboard-content">
         <header className="top-bar">
           <button className="balance-pill" type="button">
-            <span className="wallet-glyph"></span>
+            <span className="wallet-glyph">
+              <IoWallet />
+            </span>
             <strong>trader mode</strong>
           </button>
           <div className="top-actions">
             <button className="icon-button" type="button" aria-label="History">
-              @
+              <IoTimeOutline />
             </button>
             <button className="icon-button" type="button" aria-label="Scan">
-              []
+              <IoScan />
             </button>
           </div>
         </header>
 
         <section className="promo-card">
-          <span className="hyper-icon">oo</span>
+          <span className="hyper-icon">∞</span>
           <div>
             <strong>Explore Hyperliquid: 200+ markets live</strong>
             <span>Explore now</span>
@@ -38,10 +42,10 @@ function WalletDashboard() {
         </section>
 
         <section className="quick-actions" aria-label="Wallet actions">
-          <ActionButton label="Send" icon="/" />
-          <ActionButton label="Receive" icon="v" />
-          <ActionButton label="Swap" icon="~" active />
-          <ActionButton label="Buy" icon="+" />
+          <ActionButton label="Send" icon={<FiArrowUpRight />} />
+          <ActionButton label="Receive" icon={<FiArrowDown />} />
+          <ActionButton label="Swap" icon={<IoSwapHorizontal />} active />
+          <ActionButton label="Buy" icon={<FiPlus />} />
         </section>
 
         <AssetList />
