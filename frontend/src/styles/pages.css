@@ -1,0 +1,194 @@
+.wallets-screen {
+  padding: 28px 16px 0;
+}
+
+.wallets-header {
+  display: grid;
+  grid-template-columns: 48px 1fr 48px;
+  align-items: center;
+  gap: 12px;
+}
+
+.wallets-header h1 {
+  margin: 0;
+  text-align: center;
+  font-size: 22px;
+}
+
+.wallet-choice-sheet {
+  position: absolute;
+  right: 8px;
+  bottom: 10px;
+  left: 8px;
+  min-height: 58svh;
+  padding: 24px 28px 34px;
+  border-radius: 36px;
+  background: #202235;
+  box-shadow: 0 -22px 80px rgba(0, 0, 0, 0.4);
+}
+
+.sheet-close {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  display: grid;
+  width: 52px;
+  height: 52px;
+  place-items: center;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 50%;
+  color: #ffffff;
+  background: #1c2030;
+  font-size: 26px;
+}
+
+.sheet-close svg {
+  width: 24px;
+  height: 24px;
+}
+
+.wallet-illustration {
+  display: block;
+  width: min(76%, 250px);
+  height: auto;
+  margin: 54px auto 30px;
+}
+
+.option-row {
+  display: grid;
+  width: 100%;
+  grid-template-columns: 64px 1fr 20px;
+  align-items: center;
+  gap: 16px;
+  padding: 18px 0;
+  border: 0;
+  text-align: left;
+  color: #ffffff;
+  background: transparent;
+}
+
+.option-row strong {
+  display: block;
+  color: #ffffff;
+  font-weight: 800;
+}
+
+.option-row small {
+  color: #999dad;
+}
+
+.option-icon {
+  display: grid;
+  width: 54px;
+  height: 54px;
+  place-items: center;
+  border-radius: 50%;
+  background: #4a37ff;
+  font-size: 26px;
+  font-weight: 900;
+}
+
+.option-icon svg {
+  width: 24px;
+  height: 24px;
+}
+
+.option-icon.download {
+  background: #1e2250;
+  color: #5646ff;
+}
+
+.chevron {
+  color: #5544ff;
+  font-size: 24px;
+  font-weight: 900;
+}
+
+.dashboard-screen {
+  height: 100svh;
+}
+
+.dashboard-content {
+  height: 100%;
+  overflow-y: auto;
+  padding: 18px 16px 116px;
+  scrollbar-width: none;
+}
+
+.dashboard-content::-webkit-scrollbar {
+  display: none;
+}
+
+.top-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.balance-pill {
+  display: inline-flex;
+  min-width: 146px;
+  height: 50px;
+  align-items: center;
+  gap: 10px;
+  border: 0;
+  border-radius: 999px;
+  color: #ffffff;
+  background: #1d2133;
+  padding: 0 16px 0 10px;
+}
+
+.wallet-glyph {
+  display: grid;
+  width: 36px;
+  height: 36px;
+  place-items: center;
+  border-radius: 50%;
+  background: #4b3cff;
+}
+
+.wallet-glyph svg {
+  width: 24px;
+  height: 24px;
+}
+
+.top-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.portfolio-change {
+  color: #999dad;
+}
+
+.portfolio {
+  margin-top: 30px;
+  text-align: left;
+}
+
+.portfolio-value {
+  margin: 0;
+  color: #ffffff;
+  font-size: 46px;
+  line-height: 1;
+  font-weight: 900;
+}
+
+.portfolio-change {
+  margin: 14px 0 0;
+  font-size: 17px;
+  font-weight: 700;
+}
+
+.quick-actions {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-top: 42px;
+}
+
+@media (max-width: 370px) {
+  .quick-actions {
+    gap: 10px;
+  }
+}

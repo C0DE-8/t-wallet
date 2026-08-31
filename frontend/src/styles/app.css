@@ -1,0 +1,40 @@
+.app-screen {
+  position: relative;
+  width: min(100vw, 430px);
+  min-height: 100svh;
+  margin: 0 auto;
+  overflow: hidden;
+  background: #090b12;
+  color: #f7f7fb;
+}
+
+button {
+  font: inherit;
+}
+
+.icon-button {
+  display: grid;
+  width: 48px;
+  height: 48px;
+  place-items: center;
+  border: 0;
+  border-radius: 50%;
+  color: #f7f7fb;
+  background: #1c2030;
+  font-weight: 800;
+}
+
+.icon-button svg {
+  width: 24px;
+  height: 24px;
+}
+
+@media (min-width: 431px) {
+  body {
+    background: #030407;
+  }
+
+  .app-screen {
+    box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.08);
+  }
+}

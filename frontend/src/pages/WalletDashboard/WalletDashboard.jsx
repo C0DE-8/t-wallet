@@ -1,11 +1,16 @@
 import { FiArrowDown, FiArrowUpRight, FiPlus } from 'react-icons/fi'
 import { IoScan, IoSwapHorizontal, IoTimeOutline, IoWallet } from 'react-icons/io5'
-import ActionButton from '../components/ActionButton'
-import AssetList from '../components/AssetList'
-import BottomNav from '../components/BottomNav'
-import { EarnSection, PerpsSection, PredictionsSection } from '../components/MarketSections'
-import TrustAi from '../components/TrustAi'
-import Watchlist from '../components/Watchlist'
+import ActionButton from '../../components/ActionButton/ActionButton'
+import AssetList from '../../components/AssetList/AssetList'
+import BottomNav from '../../components/BottomNav/BottomNav'
+import {
+  EarnSection,
+  PerpsSection,
+  PredictionsSection,
+} from '../../components/MarketSections/MarketSections'
+import PromoSlider from '../../components/PromoSlider/PromoSlider'
+import TrustAi from '../../components/TrustAi/TrustAi'
+import Watchlist from '../../components/Watchlist/Watchlist'
 
 function WalletDashboard() {
   return (
@@ -28,13 +33,7 @@ function WalletDashboard() {
           </div>
         </header>
 
-        <section className="promo-card">
-          <span className="hyper-icon">∞</span>
-          <div>
-            <strong>Explore Hyperliquid: 200+ markets live</strong>
-            <span>Explore now</span>
-          </div>
-        </section>
+        <PromoSlider />
 
         <section className="portfolio">
           <p className="portfolio-value">$120.58</p>

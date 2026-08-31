@@ -1,5 +1,5 @@
-import { watchlist } from '../data/walletData'
-import TokenIcon from './TokenIcon'
+import { watchlist } from '../../data/walletData'
+import TokenIcon from '../TokenIcon/TokenIcon'
 
 function Watchlist() {
   return (

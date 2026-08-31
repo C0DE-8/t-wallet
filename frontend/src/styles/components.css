@@ -1,0 +1,399 @@
+.action-button {
+  display: grid;
+  gap: 10px;
+  justify-items: center;
+  border: 0;
+  color: #ffffff;
+  background: transparent;
+}
+
+.action-button span {
+  display: grid;
+  width: 74px;
+  height: 58px;
+  place-items: center;
+  border-radius: 16px;
+  background: #1c2030;
+  font-size: 30px;
+  font-weight: 900;
+}
+
+.action-button.active span {
+  background: #5140ff;
+}
+
+.action-button strong {
+  font-size: 15px;
+}
+
+.action-button svg {
+  width: 24px;
+  height: 24px;
+}
+
+.token-icon {
+  display: grid;
+  width: 50px;
+  height: 50px;
+  place-items: center;
+  border-radius: 50%;
+  color: #ffffff;
+  font-weight: 900;
+}
+
+.token-icon.teal {
+  background: #27b98f;
+}
+
+.token-icon.orange {
+  background: #f7931a;
+}
+
+.token-icon.blue {
+  background: #627eea;
+}
+
+.token-icon.yellow {
+  color: #f8d44f;
+  background: #020306;
+}
+
+.token-icon.red {
+  background: #ef1748;
+}
+
+.token-icon.violet {
+  background: linear-gradient(135deg, #19f9a8, #6b3eff, #0b0d16);
+}
+
+.token-icon.dark {
+  background: #030406;
+}
+
+.token-icon.shield {
+  background: #eef1ff;
+  color: #4439f5;
+}
+
+.promo-card {
+  display: grid;
+  grid-template-columns: 8px 52px 1fr;
+  align-items: center;
+  gap: 12px;
+  min-height: 72px;
+  margin-top: 26px;
+  padding: 12px 16px;
+  border: 1px solid #30354b;
+  border-radius: 18px;
+  background: rgba(10, 13, 22, 0.78);
+  text-align: left;
+}
+
+.promo-progress {
+  display: grid;
+  gap: 4px;
+  justify-items: center;
+}
+
+.promo-progress span {
+  width: 5px;
+  height: 5px;
+  border-radius: 999px;
+  background: #40465a;
+}
+
+.promo-progress span.active {
+  width: 5px;
+  height: 22px;
+  background: #a9afc0;
+}
+
+.promo-icon {
+  width: 46px;
+  height: 46px;
+  object-fit: contain;
+}
+
+.promo-copy {
+  min-width: 0;
+}
+
+.promo-copy strong,
+.promo-copy span {
+  display: block;
+}
+
+.promo-copy strong {
+  overflow: hidden;
+  color: #ffffff;
+  font-size: 16px;
+  line-height: 1.2;
+  font-weight: 800;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.promo-copy span {
+  margin-top: 2px;
+  overflow: hidden;
+  color: #999dad;
+  font-size: 15px;
+  line-height: 1.2;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.stack-section {
+  margin-top: 34px;
+  text-align: left;
+}
+
+.stack-section h2 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 18px;
+  color: #ffffff;
+  font-size: 19px;
+}
+
+.asset-list {
+  display: grid;
+  gap: 22px;
+}
+
+.asset-row {
+  display: grid;
+  grid-template-columns: 58px 1fr auto;
+  align-items: center;
+  gap: 12px;
+}
+
+.asset-copy,
+.asset-value {
+  display: grid;
+  gap: 3px;
+}
+
+.asset-copy strong,
+.asset-value strong {
+  display: block;
+  color: #ffffff;
+  font-size: 18px;
+  font-weight: 800;
+}
+
+.asset-copy span,
+.asset-value span {
+  color: #999dad;
+}
+
+.asset-value {
+  justify-items: end;
+}
+
+.view-all {
+  display: inline-flex;
+  min-width: 118px;
+  height: 54px;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 28px;
+  border: 0;
+  border-radius: 999px;
+  color: #ffffff;
+  background: #202436;
+  font-weight: 800;
+}
+
+.clip-section {
+  margin-right: -16px;
+  overflow: hidden;
+}
+
+.card-row {
+  display: flex;
+  gap: 14px;
+  overflow-x: auto;
+  padding-right: 16px;
+  scrollbar-width: none;
+}
+
+.card-row::-webkit-scrollbar {
+  display: none;
+}
+
+.market-card,
+.prediction-card {
+  flex: 0 0 178px;
+  min-height: 128px;
+  padding: 22px;
+  border-radius: 8px;
+  background: #1c2030;
+}
+
+.market-card {
+  display: grid;
+  align-content: end;
+  gap: 8px;
+}
+
+.market-card .token-icon {
+  margin-bottom: 18px;
+}
+
+.market-card strong,
+.prediction-card strong {
+  display: block;
+  color: #ffffff;
+  font-weight: 800;
+}
+
+.market-card span,
+.market-card small {
+  color: #8f96aa;
+}
+
+.market-card span {
+  font-size: 15px;
+}
+
+.prediction-card {
+  position: relative;
+  display: grid;
+  align-content: space-between;
+}
+
+.prediction-card small {
+  position: absolute;
+  top: 24px;
+  right: 20px;
+  color: #a2a7b6;
+}
+
+.flag-icon,
+.globe-icon {
+  display: block;
+  width: 48px;
+  height: 48px;
+  border-radius: 14px;
+}
+
+.flag-icon {
+  background: linear-gradient(#26df72 0 33%, #ffffff 33% 66%, #ed394f 66%);
+}
+
+.globe-icon {
+  background: radial-gradient(circle at 60% 38%, #ffffff, #91b5ff 64%, #3c4fff 65%);
+}
+
+.trust-ai {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  margin-top: 26px;
+  padding: 14px 16px;
+  border: 0;
+  border-radius: 14px;
+  background: #202436;
+  text-align: left;
+}
+
+.trust-ai strong {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: #ffffff;
+  font-weight: 800;
+}
+
+.trust-ai button {
+  height: 44px;
+  padding: 0 18px;
+  border: 0;
+  border-radius: 999px;
+  color: #ffffff;
+  background: #2a3046;
+  font-weight: 800;
+}
+
+.watchlist {
+  padding-bottom: 34px;
+}
+
+.watchlist .asset-row {
+  margin-top: 18px;
+}
+
+.loss {
+  color: #e65c71 !important;
+}
+
+.gain {
+  color: #3ed789 !important;
+}
+
+.bottom-nav {
+  position: absolute;
+  right: 16px;
+  bottom: 12px;
+  left: 16px;
+  display: grid;
+  grid-template-columns: 1fr 64px;
+  gap: 12px;
+  align-items: center;
+}
+
+.nav-group {
+  display: grid;
+  height: 68px;
+  grid-template-columns: repeat(4, 1fr);
+  align-items: center;
+  padding: 4px;
+  border: 1px solid #2f354b;
+  border-radius: 999px;
+  background: rgba(9, 11, 18, 0.86);
+  box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(16px);
+}
+
+.bottom-nav button {
+  display: grid;
+  height: 58px;
+  place-items: center;
+  border: 0;
+  border-radius: 999px;
+  color: #ffffff;
+  background: transparent;
+  font-weight: 900;
+}
+
+.bottom-nav svg {
+  width: 24px;
+  height: 24px;
+}
+
+.bottom-nav .selected {
+  background: #252a3e;
+}
+
+.search-fab {
+  width: 64px;
+  border: 1px solid #2f354b !important;
+  background: rgba(9, 11, 18, 0.86) !important;
+  box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(16px);
+}
+
+@media (max-width: 370px) {
+  .action-button span {
+    width: 66px;
+  }
+
+  .asset-copy strong,
+  .asset-value strong {
+    font-size: 16px;
+  }
+}

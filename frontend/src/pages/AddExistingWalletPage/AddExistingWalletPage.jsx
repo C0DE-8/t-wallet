@@ -6,7 +6,7 @@ import {
   IoSettingsOutline,
   IoSparkles,
 } from 'react-icons/io5'
-import walletIllustration from '../assets/icons/wallet.png'
+import walletIllustration from '../../assets/icons/wallet.png'
 
 function AddExistingWalletPage() {
   const navigate = useNavigate()

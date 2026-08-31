@@ -1,5 +1,5 @@
-import { assets } from '../data/walletData'
-import TokenIcon from './TokenIcon'
+import { assets } from '../../data/walletData'
+import TokenIcon from '../TokenIcon/TokenIcon'
 
 function AssetList() {
   return (

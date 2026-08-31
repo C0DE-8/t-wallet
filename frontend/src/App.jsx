@@ -1,7 +1,9 @@
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
-import AddExistingWalletPage from './pages/AddExistingWalletPage'
-import WalletDashboard from './pages/WalletDashboard'
-import './App.css'
+import AddExistingWalletPage from './pages/AddExistingWalletPage/AddExistingWalletPage'
+import WalletDashboard from './pages/WalletDashboard/WalletDashboard'
+import './styles/app.css'
+import './styles/pages.css'
+import './styles/components.css'
 
 function App() {
   return (

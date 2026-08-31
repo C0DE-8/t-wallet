@@ -1,4 +1,4 @@
-import TokenIcon from './TokenIcon'
+import TokenIcon from '../TokenIcon/TokenIcon'
 
 export function PerpsSection() {
   return (
