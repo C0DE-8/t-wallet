@@ -1,5 +1,4 @@
 import { useNavigate } from 'react-router-dom'
-import { BsThreeDotsVertical } from 'react-icons/bs'
 import {
   IoChevronForward,
   IoClose,
@@ -7,7 +6,6 @@ import {
   IoSettingsOutline,
   IoSparkles,
 } from 'react-icons/io5'
-import TokenIcon from '../components/TokenIcon'
 import walletIllustration from '../assets/icons/wallet.png'
 
 function AddExistingWalletPage() {
@@ -24,23 +22,6 @@ function AddExistingWalletPage() {
           <IoSettingsOutline />
         </button>
       </header>
-
-      <section className="wallet-list" aria-label="Multi-coin wallets">
-        <p className="section-kicker">Multi-coin wallets</p>
-        <div className="wallet-card">
-          <TokenIcon tone="shield" label="Trust" />
-          <div>
-            <strong>Main Wallet</strong>
-            <span>Multi-coin wallet</span>
-          </div>
-          <button className="more-button" type="button" aria-label="Wallet options">
-            <BsThreeDotsVertical />
-          </button>
-        </div>
-        <button className="backup-link" type="button">
-          Back up manually
-        </button>
-      </section>
 
       <section className="wallet-choice-sheet" aria-label="Wallet setup options">
         <button className="sheet-close" type="button" aria-label="Close">
