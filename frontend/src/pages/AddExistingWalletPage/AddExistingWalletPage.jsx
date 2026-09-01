@@ -11,12 +11,12 @@ import {
   IoScan,
   IoSearch,
   IoSettingsOutline,
+  IoShieldCheckmarkOutline,
   IoSparkles,
 } from 'react-icons/io5'
 import { SiBitcoin, SiCardano, SiDogecoin, SiEthereum, SiSolana } from 'react-icons/si'
 import shieldIllustration from '../../assets/icons/shield.png'
 import walletIllustration from '../../assets/icons/wallet.png'
-import TokenIcon from '../../components/TokenIcon/TokenIcon'
 
 const safetyChecks = [
   'Only you know this secret phrase.',
@@ -177,8 +177,10 @@ function AddExistingWalletPage() {
           type="button"
           onClick={() => setStep('restore')}
         >
-          <span>Recommended</span>
-          <TokenIcon tone="shield" label="TW" />
+          <span className="recommended-network-badge">Recommended</span>
+          <span className="multi-coin-icon">
+            <IoShieldCheckmarkOutline />
+          </span>
           <strong>Multi-coin wallet</strong>
           <IoChevronForward className="chevron" />
         </button>
@@ -217,21 +219,21 @@ function AddExistingWalletPage() {
         <section className="restore-form">
           <label>
             <span>Wallet name</span>
-            <input type="text" value="Main Wallet 1" readOnly />
+            <div className="wallet-name-field">
+              <input type="text" value="Main Wallet 1" readOnly />
+              <IoClose className="wallet-name-clear" aria-hidden="true" />
+            </div>
           </label>
           <label>
             <span>Secret phrase</span>
             <div className="secret-phrase-safe-box">
-              <strong>Restore securely in Trust Wallet</strong>
-              <small>
-                This demo does not collect or submit recovery phrases.
-              </small>
+              <button type="button">Paste</button>
             </div>
           </label>
           <p>Typically 12 (sometimes 18, 24) words separated by single spaces</p>
         </section>
         <section className="restore-actions">
-          <button className="continue-button active" type="button" onClick={() => navigate('/wallet')}>
+          <button className="continue-button" type="button" disabled onClick={() => navigate('/wallet')}>
             Restore wallet
           </button>
           <button className="secret-help" type="button" onClick={openTrustWalletSite}>

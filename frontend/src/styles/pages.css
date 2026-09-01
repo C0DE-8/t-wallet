@@ -1,5 +1,5 @@
 .wallets-screen {
-  padding: 24px 14px 0;
+  padding: max(18px, env(safe-area-inset-top)) 16px 0;
 }
 
 .wallets-header {
@@ -17,13 +17,13 @@
 
 .wallet-choice-sheet {
   position: absolute;
-  right: 6px;
+  right: 8px;
   bottom: 8px;
-  left: 6px;
+  left: 8px;
   min-height: min(56svh, 460px);
-  padding: 20px 22px 28px;
-  border-radius: 30px;
-  background: #202235;
+  padding: 20px 24px 28px;
+  border-radius: 34px;
+  background: #202133;
   box-shadow: 0 -22px 80px rgba(0, 0, 0, 0.4);
 }
 
@@ -104,7 +104,7 @@
 }
 
 .chevron {
-  color: #5544ff;
+  color: #4f3dff;
   font-size: 24px;
   font-weight: 900;
 }
@@ -113,15 +113,23 @@
 .network-screen,
 .restore-screen {
   height: 100svh;
-  overflow: hidden;
-  padding: 18px 14px 24px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: max(14px, env(safe-area-inset-top)) 16px max(22px, env(safe-area-inset-bottom));
+  scrollbar-width: none;
+}
+
+.add-wallet-screen::-webkit-scrollbar,
+.network-screen::-webkit-scrollbar,
+.restore-screen::-webkit-scrollbar {
+  display: none;
 }
 
 .flow-header {
   display: grid;
-  grid-template-columns: 40px minmax(0, 1fr) 40px;
+  grid-template-columns: 48px minmax(0, 1fr) 48px;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
 }
 
 .flow-header h1 {
@@ -129,72 +137,76 @@
   overflow: hidden;
   color: #ffffff;
   text-align: center;
-  font-size: 18px;
-  font-weight: 800;
+  font-size: 20px;
+  font-weight: 850;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
 .icon-button.muted {
-  color: #090b12;
-  background: #d4d6df;
+  color: #11131d;
+  background: #d5d7df;
 }
 
 .add-wallet-options {
-  margin-top: 38px;
+  margin-top: 42px;
 }
 
 .add-wallet-options h2 {
-  margin: 0 0 16px;
+  margin: 0 0 18px;
   color: #ffffff;
-  font-size: 17px;
+  font-size: 18px;
+  line-height: 1.2;
+  font-weight: 850;
 }
 
 .restore-option {
   display: grid;
   width: 100%;
-  min-height: 74px;
-  grid-template-columns: 48px minmax(0, 1fr) 22px;
+  min-height: 80px;
+  grid-template-columns: 54px minmax(0, 1fr) 24px;
   align-items: center;
-  gap: 12px;
-  margin-top: 12px;
-  padding: 12px 16px;
+  gap: 14px;
+  margin-top: 14px;
+  padding: 14px 18px;
   border: 0;
-  border-radius: 8px;
+  border-radius: 10px;
   color: #ffffff;
-  background: #202234;
+  background: #202134;
   text-align: left;
 }
 
 .restore-option-icon {
   display: grid;
-  width: 40px;
-  height: 40px;
+  width: 46px;
+  height: 46px;
   place-items: center;
   border-radius: 50%;
-  color: #5b4bff;
-  background: #202052;
+  color: #4f3dff;
+  background: #191747;
 }
 
 .restore-option-icon svg {
-  width: 22px;
-  height: 22px;
+  width: 25px;
+  height: 25px;
 }
 
 .restore-option strong {
   overflow: hidden;
-  font-size: 18px;
+  font-size: 20px;
+  line-height: 1.15;
+  font-weight: 850;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
 .more-options {
-  margin-top: 24px;
+  margin-top: 28px;
   border: 0;
   color: #a6a8b6;
   background: transparent;
-  font-size: 16px;
-  font-weight: 800;
+  font-size: 18px;
+  font-weight: 850;
 }
 
 .secret-safety-backdrop {
@@ -202,126 +214,176 @@
   inset: 0;
   display: grid;
   align-items: end;
-  background: rgba(0, 0, 0, 0.68);
+  padding-top: min(29svh, 220px);
+  background: rgba(0, 0, 0, 0.72);
   animation: sheet-backdrop-in 180ms ease-out both;
 }
 
 .secret-safety-sheet {
   position: relative;
-  min-height: min(70svh, 574px);
-  padding: 74px 22px 24px;
-  border-radius: 34px 34px 0 0;
-  background: #10111b;
+  display: grid;
+  align-content: start;
+  gap: 0;
+  width: 100%;
+  min-height: min(73svh, 620px);
+  max-height: calc(100svh - 96px);
+  overflow-y: auto;
+  padding: 62px 22px max(24px, env(safe-area-inset-bottom));
+  border-radius: 36px 36px 0 0;
+  background: #10121b;
   box-shadow: 0 -24px 80px rgba(0, 0, 0, 0.48);
   animation: sheet-slide-up 260ms cubic-bezier(0.2, 0.85, 0.2, 1) both;
+  scrollbar-width: none;
+}
+
+.secret-safety-sheet::-webkit-scrollbar {
+  display: none;
+}
+
+.secret-safety-sheet .sheet-close {
+  top: 18px;
+  right: 18px;
+  width: 48px;
+  height: 48px;
+  background: rgba(31, 34, 48, 0.92);
 }
 
 .safety-illustration {
   display: block;
-  width: min(48vw, 178px);
+  width: min(52vw, 210px);
   height: auto;
-  margin: 0 auto 28px;
+  margin: 30px auto 34px;
   object-fit: contain;
 }
 
 .secret-safety-sheet h2 {
-  max-width: 300px;
-  margin: 0 auto 24px;
+  max-width: 360px;
+  margin: 0 auto 26px;
   color: #ffffff;
   text-align: center;
-  font-size: 22px;
-  line-height: 1.18;
+  font-size: 24px;
+  line-height: 1.14;
   font-weight: 850;
 }
 
 .safety-checks {
   display: grid;
-  gap: 12px;
+  gap: 14px;
 }
 
 .safety-check {
   display: grid;
-  min-height: 66px;
-  grid-template-columns: 30px minmax(0, 1fr);
+  min-height: 62px;
+  grid-template-columns: 34px minmax(0, 1fr);
   align-items: center;
-  gap: 12px;
-  padding: 12px 14px;
+  gap: 10px;
+  padding: 12px 16px;
   border-radius: 12px;
-  color: #c9cbd8;
-  background: #202234;
-  font-size: 13.5px;
-  line-height: 1.25;
+  color: #c9cbd6;
+  background: #202134;
+  font-size: 14px;
+  line-height: 1.22;
+  font-weight: 650;
 }
 
 .safety-check input {
-  width: 22px;
-  height: 22px;
+  appearance: none;
+  display: grid;
+  width: 24px;
+  height: 24px;
   margin: 0;
-  accent-color: #5b4bff;
+  place-items: center;
+  border: 2px solid #77798b;
+  border-radius: 5px;
+  background: transparent;
+}
+
+.safety-check input::before {
+  width: 12px;
+  height: 7px;
+  border-bottom: 3px solid #11131d;
+  border-left: 3px solid #11131d;
+  content: "";
+  opacity: 0;
+  transform: translateY(-1px) rotate(-45deg);
+}
+
+.safety-check input:checked {
+  border-color: #4f3dff;
+  background: #4f3dff;
+}
+
+.safety-check input:checked::before {
+  opacity: 1;
 }
 
 .continue-button {
   width: 100%;
-  height: 54px;
-  margin-top: 24px;
+  height: 56px;
+  margin-top: 26px;
   border: 0;
   border-radius: 999px;
-  color: #6f7280;
-  background: #202230;
-  font-weight: 800;
+  color: #6b6e7d;
+  background: #20212d;
+  font-size: 17px;
+  font-weight: 850;
 }
 
 .continue-button.active,
 .continue-button:not(:disabled) {
   color: #ffffff;
-  background: #5140ff;
+  background: #4f3dff;
+}
+
+.continue-button:disabled {
+  cursor: default;
 }
 
 .network-search {
   display: flex;
   align-items: center;
-  gap: 12px;
-  height: 58px;
-  margin-top: 34px;
-  padding: 0 24px;
+  gap: 13px;
+  height: 60px;
+  margin-top: 36px;
+  padding: 0 20px;
   border-radius: 999px;
   color: #777a88;
-  background: #252530;
+  background: #262630;
   font-size: 18px;
-  font-weight: 700;
+  font-weight: 750;
 }
 
 .network-search svg {
-  width: 24px;
-  height: 24px;
-  color: #d8dae6;
+  width: 25px;
+  height: 25px;
+  color: #cfd1dc;
 }
 
 .recommended-network {
   position: relative;
   display: grid;
   width: 100%;
-  min-height: 88px;
+  min-height: 78px;
   grid-template-columns: 54px minmax(0, 1fr) 24px;
   align-items: center;
   gap: 12px;
   margin-top: 64px;
-  padding: 16px;
-  border: 1px solid #5b4bff;
-  border-radius: 8px;
+  padding: 13px 18px;
+  border: 1.5px solid #4f3dff;
+  border-radius: 10px;
   color: #ffffff;
-  background: #202234;
+  background: #202134;
   text-align: left;
 }
 
-.recommended-network > span {
+.recommended-network-badge {
   position: absolute;
-  top: -17px;
+  top: -16px;
   left: 28px;
-  padding: 1px 10px;
+  padding: 0 10px 2px;
   border-radius: 999px;
-  color: #080a12;
-  background: #5b4bff;
+  color: #10121b;
+  background: #4f3dff;
   font-size: 16px;
   font-weight: 900;
 }
@@ -329,29 +391,31 @@
 .recommended-network strong,
 .network-row strong {
   overflow: hidden;
-  font-size: 18px;
+  font-size: 19px;
+  line-height: 1.15;
+  font-weight: 850;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
 .network-list {
-  margin-top: 32px;
+  margin-top: 30px;
   overflow: hidden;
-  border-radius: 8px;
+  border-radius: 10px;
 }
 
 .network-row {
   display: grid;
   width: 100%;
-  min-height: 70px;
+  min-height: 64px;
   grid-template-columns: 54px minmax(0, 1fr) 24px;
   align-items: center;
   gap: 12px;
-  padding: 12px 16px;
+  padding: 10px 18px;
   border: 0;
   border-bottom: 1px solid #141723;
   color: #ffffff;
-  background: #202234;
+  background: #202134;
   text-align: left;
 }
 
@@ -363,6 +427,21 @@
   border-radius: 50%;
   color: #ffffff;
   font-weight: 900;
+}
+
+.multi-coin-icon {
+  display: grid;
+  width: 48px;
+  height: 48px;
+  place-items: center;
+  border-radius: 50%;
+  color: #4f3dff;
+  background: #f2f4ff;
+}
+
+.multi-coin-icon svg {
+  width: 25px;
+  height: 25px;
 }
 
 .network-icon svg {
@@ -402,8 +481,8 @@
 
 .restore-form {
   display: grid;
-  gap: 30px;
-  margin-top: 34px;
+  gap: 28px;
+  margin-top: 36px;
 }
 
 .restore-form label {
@@ -413,63 +492,92 @@
 
 .restore-form label > span {
   color: #a8aaba;
-  font-size: 18px;
-  font-weight: 800;
+  font-size: 17px;
+  line-height: 1.2;
+  font-weight: 850;
 }
 
-.restore-form input,
+.wallet-name-field,
 .secret-phrase-safe-box {
   width: 100%;
-  border: 1px solid #444657;
-  border-radius: 8px;
+  border: 1px solid #454757;
+  border-radius: 10px;
   color: #ffffff;
   background: transparent;
 }
 
+.wallet-name-field {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 32px;
+  align-items: center;
+  min-height: 58px;
+  padding: 0 16px 0 18px;
+}
+
 .restore-form input {
-  height: 58px;
-  padding: 0 18px;
+  min-width: 0;
+  height: 56px;
+  padding: 0;
+  border: 0;
+  color: #ffffff;
+  background: transparent;
   font-size: 20px;
-  font-weight: 800;
+  font-weight: 850;
+  outline: 0;
+}
+
+.wallet-name-clear {
+  width: 22px;
+  height: 22px;
+  justify-self: end;
+  border-radius: 50%;
+  color: #11131d;
+  background: #f1f2f7;
+  padding: 3px;
 }
 
 .secret-phrase-safe-box {
-  display: grid;
-  min-height: 260px;
-  align-content: center;
-  gap: 8px;
-  padding: 22px;
+  position: relative;
+  min-height: clamp(250px, 44svh, 306px);
+  padding: 18px;
 }
 
-.secret-phrase-safe-box strong {
-  font-size: 18px;
-}
-
-.secret-phrase-safe-box small,
 .restore-form p {
   color: #b4b6c5;
   font-size: 16px;
   line-height: 1.25;
 }
 
+.secret-phrase-safe-box button {
+  position: absolute;
+  right: 18px;
+  bottom: 20px;
+  border: 0;
+  color: #4f3dff;
+  background: transparent;
+  font-size: 17px;
+  font-weight: 850;
+}
+
 .restore-form p {
-  margin: -14px 0 0;
+  margin: -12px 0 0;
 }
 
 .restore-actions {
-  position: absolute;
-  right: 14px;
-  bottom: 28px;
-  left: 14px;
+  position: sticky;
+  bottom: 0;
   display: grid;
-  gap: 24px;
-  padding-top: 28px;
+  gap: 26px;
+  margin-top: clamp(88px, 18svh, 160px);
+  padding-top: 26px;
+  padding-bottom: max(0px, env(safe-area-inset-bottom));
   border-top: 1px solid #232532;
+  background: #0b0b13;
 }
 
 .secret-help {
   border: 0;
-  color: #5140ff;
+  color: #4f3dff;
   background: transparent;
   font-size: 18px;
   font-weight: 900;
@@ -584,16 +692,15 @@
 
 @media (max-width: 410px) {
   .wallets-screen {
-    padding: 24px 14px 0;
+    padding: max(18px, env(safe-area-inset-top)) 16px 0;
   }
 
   .wallet-choice-sheet {
-    right: 6px;
+    right: 8px;
     bottom: 8px;
-    left: 6px;
+    left: 8px;
     min-height: 56svh;
     padding: 22px 22px 28px;
-    border-radius: 30px;
   }
 
   .wallet-illustration {
@@ -626,8 +733,8 @@
   }
 
   .icon-button {
-    width: 40px;
-    height: 40px;
+    width: 44px;
+    height: 44px;
   }
 
   .balance-pill {
@@ -656,6 +763,72 @@
 }
 
 @media (max-width: 370px) {
+  .add-wallet-screen,
+  .network-screen,
+  .restore-screen {
+    padding-inline: 14px;
+  }
+
+  .flow-header {
+    grid-template-columns: 44px minmax(0, 1fr) 44px;
+  }
+
+  .flow-header h1 {
+    font-size: 18px;
+  }
+
+  .restore-option,
+  .recommended-network,
+  .network-row {
+    grid-template-columns: 48px minmax(0, 1fr) 22px;
+    padding-inline: 14px;
+  }
+
+  .restore-option strong,
+  .recommended-network strong,
+  .network-row strong {
+    font-size: 17px;
+  }
+
+  .safety-illustration {
+    width: min(44vw, 142px);
+    margin-top: 8px;
+    margin-bottom: 22px;
+  }
+
+  .secret-safety-sheet {
+    max-height: calc(100svh - 72px);
+    padding-top: 50px;
+    padding-inline: 18px;
+  }
+
+  .secret-safety-sheet .sheet-close {
+    top: 14px;
+    right: 14px;
+    width: 40px;
+    height: 40px;
+  }
+
+  .secret-safety-sheet h2 {
+    margin-bottom: 18px;
+    font-size: 20px;
+  }
+
+  .safety-checks {
+    gap: 10px;
+  }
+
+  .safety-check {
+    min-height: 58px;
+    padding: 10px 14px;
+    font-size: 12px;
+  }
+
+  .continue-button {
+    height: 52px;
+    margin-top: 18px;
+  }
+
   .quick-actions {
     gap: 8px;
     margin-top: 34px;
