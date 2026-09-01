@@ -1,4 +1,8 @@
 const http = require('node:http')
+const { loadEnv } = require('./config/env')
+
+loadEnv()
+
 const { runMigrations } = require('./db/migrate')
 const { handleBotRoute } = require('./routes/bot')
 

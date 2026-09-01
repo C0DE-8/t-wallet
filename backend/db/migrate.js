@@ -1,6 +1,9 @@
 const { execFileSync } = require('node:child_process')
 const fs = require('node:fs')
 const path = require('node:path')
+const { loadEnv } = require('../config/env')
+
+loadEnv()
 
 const backendRoot = path.resolve(__dirname, '..')
 const databasePath = path.resolve(backendRoot, process.env.DATABASE_PATH || './data/app.sqlite')

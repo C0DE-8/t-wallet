@@ -5,6 +5,7 @@ function handleBotRoute(request, response) {
     sendJson(response, 200, {
       status: 'ok',
       route: '/bot',
+      botConfigured: Boolean(process.env.BOT_TOKEN),
       message: 'Bot route is ready.',
     })
     return
