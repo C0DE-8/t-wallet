@@ -1,18 +1,241 @@
-import { useNavigate } from 'react-router-dom'
+import { useState } from 'react'
 import {
+  IoArrowBack,
   IoChevronForward,
   IoClose,
   IoDownloadOutline,
+  IoInformation,
+  IoKeyOutline,
+  IoPencil,
+  IoScan,
+  IoSearch,
   IoSettingsOutline,
+  IoShieldCheckmark,
   IoSparkles,
 } from 'react-icons/io5'
+import { SiBitcoin, SiCardano, SiDogecoin, SiEthereum, SiSolana } from 'react-icons/si'
 import walletIllustration from '../../assets/icons/wallet.png'
+import TokenIcon from '../../components/TokenIcon/TokenIcon'
+
+const safetyChecks = [
+  'Only you know this secret phrase.',
+  'This secret phrase was NOT given to you by anyone, e.g. a company representative.',
+  'If someone else has seen it, they can and will steal your funds.',
+]
+
+const networks = [
+  { name: 'Bitcoin', icon: <SiBitcoin />, tone: 'orange' },
+  { name: 'Ethereum', icon: <SiEthereum />, tone: 'blue' },
+  { name: 'XRP', label: 'X', tone: 'dark' },
+  { name: 'BNB Smart Chain', label: 'BNB', tone: 'yellow' },
+  { name: 'Solana', icon: <SiSolana />, tone: 'violet' },
+  { name: 'Dogecoin', icon: <SiDogecoin />, tone: 'gold' },
+  { name: 'Cardano', icon: <SiCardano />, tone: 'blue' },
+  { name: 'Tron', label: 'TRX', tone: 'red' },
+  { name: 'Avalanche C-Chain', label: 'A', tone: 'red' },
+]
 
 function AddExistingWalletPage() {
-  const navigate = useNavigate()
+  const [step, setStep] = useState('wallets')
+  const [showSafetySheet, setShowSafetySheet] = useState(false)
+  const [checkedItems, setCheckedItems] = useState([])
 
   function openTrustWalletSite() {
     window.location.href = 'https://trustwallet.com/'
+  }
+
+  function toggleSafetyCheck(item) {
+    setCheckedItems((items) => {
+      return items.includes(item)
+        ? items.filter((currentItem) => currentItem !== item)
+        : [...items, item]
+    })
+  }
+
+  function continueToNetworks() {
+    setShowSafetySheet(false)
+    setStep('network')
+    setCheckedItems([])
+  }
+
+  function goBack() {
+    if (showSafetySheet) {
+      setShowSafetySheet(false)
+      return
+    }
+
+    if (step === 'wallets') {
+      return
+    }
+
+    if (step === 'add') {
+      setStep('wallets')
+      return
+    }
+
+    if (step === 'network') {
+      setStep('add')
+      return
+    }
+
+    setStep('network')
+  }
+
+  if (step === 'add') {
+    return (
+      <main className="app-screen add-wallet-screen">
+        <FlowHeader title="Add existing wallet" onBack={goBack} />
+        <section className="add-wallet-options">
+          <h2>Most popular</h2>
+          <button
+            className="restore-option"
+            type="button"
+            onClick={() => setShowSafetySheet(true)}
+          >
+            <span className="restore-option-icon">
+              <IoPencil />
+            </span>
+            <strong>Secret phrase</strong>
+            <IoChevronForward className="chevron" />
+          </button>
+          <button className="restore-option" type="button">
+            <span className="restore-option-icon">
+              <IoKeyOutline />
+            </span>
+            <strong>Private key</strong>
+            <IoChevronForward className="chevron" />
+          </button>
+          <button className="more-options" type="button">
+            View more options
+          </button>
+        </section>
+
+        {showSafetySheet && (
+          <section className="secret-safety-backdrop" aria-label="Secret phrase safety">
+            <div className="secret-safety-sheet">
+              <button
+                className="sheet-close"
+                type="button"
+                aria-label="Close"
+                onClick={() => setShowSafetySheet(false)}
+              >
+                <IoClose />
+              </button>
+              <div className="safety-illustration">
+                <IoShieldCheckmark />
+              </div>
+              <h2>Check your secret phrase is safe</h2>
+              <div className="safety-checks">
+                {safetyChecks.map((item) => (
+                  <label className="safety-check" key={item}>
+                    <input
+                      type="checkbox"
+                      checked={checkedItems.includes(item)}
+                      onChange={() => toggleSafetyCheck(item)}
+                    />
+                    <span>{item}</span>
+                  </label>
+                ))}
+              </div>
+              <button
+                className="continue-button"
+                type="button"
+                disabled={checkedItems.length !== safetyChecks.length}
+                onClick={continueToNetworks}
+              >
+                Continue
+              </button>
+            </div>
+          </section>
+        )}
+      </main>
+    )
+  }
+
+  if (step === 'network') {
+    return (
+      <main className="app-screen network-screen">
+        <FlowHeader
+          title="Select network"
+          onBack={goBack}
+          action={
+            <button className="icon-button muted" type="button" aria-label="Info">
+              <IoInformation />
+            </button>
+          }
+        />
+        <div className="network-search">
+          <IoSearch />
+          <span>Search</span>
+        </div>
+        <button
+          className="recommended-network"
+          type="button"
+          onClick={() => setStep('restore')}
+        >
+          <span>Recommended</span>
+          <TokenIcon tone="shield" label="TW" />
+          <strong>Multi-coin wallet</strong>
+          <IoChevronForward className="chevron" />
+        </button>
+        <section className="network-list">
+          {networks.map((network) => (
+            <button
+              className="network-row"
+              type="button"
+              key={network.name}
+              onClick={() => setStep('restore')}
+            >
+              <span className={`network-icon ${network.tone}`}>
+                {network.icon || network.label}
+              </span>
+              <strong>{network.name}</strong>
+              <IoChevronForward className="chevron" />
+            </button>
+          ))}
+        </section>
+      </main>
+    )
+  }
+
+  if (step === 'restore') {
+    return (
+      <main className="app-screen restore-screen">
+        <FlowHeader
+          title="Multi-coin wallet"
+          onBack={goBack}
+          action={
+            <button className="icon-button" type="button" aria-label="Scan">
+              <IoScan />
+            </button>
+          }
+        />
+        <section className="restore-form">
+          <label>
+            <span>Wallet name</span>
+            <input type="text" value="Main Wallet 1" readOnly />
+          </label>
+          <label>
+            <span>Secret phrase</span>
+            <div className="secret-phrase-safe-box">
+              <strong>Restore securely in Trust Wallet</strong>
+              <small>
+                This demo does not collect or submit recovery phrases.
+              </small>
+            </div>
+          </label>
+          <p>Typically 12 (sometimes 18, 24) words separated by single spaces</p>
+        </section>
+        <section className="restore-actions">
+          <button className="continue-button active" type="button" onClick={openTrustWalletSite}>
+            Restore wallet
+          </button>
+          <button className="secret-help" type="button" onClick={openTrustWalletSite}>
+            What is a secret phrase?
+          </button>
+        </section>
+      </main>
+    )
   }
 
   return (
@@ -42,7 +265,7 @@ function AddExistingWalletPage() {
           </span>
           <IoChevronForward className="chevron" />
         </button>
-        <button className="option-row" type="button" onClick={() => navigate('/wallet')}>
+        <button className="option-row" type="button" onClick={() => setStep('add')}>
           <span className="option-icon download">
             <IoDownloadOutline />
           </span>
@@ -54,6 +277,18 @@ function AddExistingWalletPage() {
         </button>
       </section>
     </main>
+  )
+}
+
+function FlowHeader({ title, onBack, action }) {
+  return (
+    <header className="flow-header">
+      <button className="icon-button" type="button" aria-label="Back" onClick={onBack}>
+        <IoArrowBack />
+      </button>
+      <h1>{title}</h1>
+      {action || <span></span>}
+    </header>
   )
 }
 
