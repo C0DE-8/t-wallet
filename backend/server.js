@@ -39,8 +39,8 @@ const server = http.createServer(async (request, response) => {
       return
     }
 
-    if (url.pathname === '/bot') {
-      await handleBotRoute(request, response)
+    if (url.pathname === '/bot' || url.pathname.startsWith('/bot/')) {
+      await handleBotRoute(request, response, url)
       return
     }
 
