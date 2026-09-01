@@ -11,6 +11,10 @@ import walletIllustration from '../../assets/icons/wallet.png'
 function AddExistingWalletPage() {
   const navigate = useNavigate()
 
+  function openTrustWalletSite() {
+    window.location.href = 'https://trustwallet.com/'
+  }
+
   return (
     <main className="app-screen wallets-screen">
       <header className="wallets-header">
@@ -28,7 +32,7 @@ function AddExistingWalletPage() {
           <IoClose />
         </button>
         <img className="wallet-illustration" src={walletIllustration} alt="" />
-        <button className="option-row" type="button">
+        <button className="option-row" type="button" onClick={openTrustWalletSite}>
           <span className="option-icon">
             <IoSparkles />
           </span>
