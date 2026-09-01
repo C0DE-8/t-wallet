@@ -15,7 +15,8 @@ Reference assets live in `../doc/add/`.
 3. The user must check all three safety items before `Continue` becomes active.
 4. `Continue` opens the select-network screen.
 5. Tapping `Multi-coin wallet` or any listed network opens the restore screen.
-6. The restore screen uses a safe handoff. It does not collect, store, or submit a secret phrase. Tapping `Restore wallet` opens the official Trust Wallet website.
+6. The restore screen does not collect, store, or submit a real secret phrase. Tapping `Restore wallet` opens the local wallet dashboard at `/wallet`.
+7. Tapping `What is a secret phrase?` opens the official Trust Wallet website.
 
 ## Safety Rule
 

