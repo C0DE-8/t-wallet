@@ -25,11 +25,29 @@ button {
   color: #f7f7fb;
   background: #1c1f2d;
   font-weight: 800;
+  transition:
+    background-color 140ms ease,
+    border-color 140ms ease,
+    opacity 140ms ease,
+    transform 140ms ease;
 }
 
 .icon-button svg {
   width: 24px;
   height: 24px;
+}
+
+.icon-button:hover {
+  background: #25283a;
+}
+
+.icon-button:active {
+  transform: scale(0.96);
+}
+
+.icon-button:focus-visible {
+  outline: 2px solid #7467ff;
+  outline-offset: 3px;
 }
 
 @media (min-width: 391px) {

