@@ -1,12 +1,20 @@
-const { execSql } = require('../db/migrate')
+const { escapeSql, execute, queryJson } = require('../db/sqlite')
 
 function handleBotRoute(request, response) {
   if (request.method === 'GET') {
+    const messages = queryJson(`
+      SELECT id, message, response, created_at
+      FROM bot_messages
+      ORDER BY id DESC
+      LIMIT 20;
+    `)
+
     sendJson(response, 200, {
       status: 'ok',
       route: '/bot',
       botConfigured: Boolean(process.env.BOT_TOKEN),
       message: 'Bot route is ready.',
+      messages,
     })
     return
   }
@@ -23,7 +31,7 @@ function handleBotRoute(request, response) {
 
         const botResponse = createBotResponse(message)
 
-        execSql(`
+        execute(`
           INSERT INTO bot_messages (message, response)
           VALUES ('${escapeSql(message)}', '${escapeSql(botResponse)}');
         `)
@@ -79,10 +87,6 @@ function sendJson(response, statusCode, payload) {
     'Access-Control-Allow-Methods': 'GET,POST,OPTIONS',
   })
   response.end(JSON.stringify(payload))
-}
-
-function escapeSql(value) {
-  return value.replaceAll("'", "''")
 }
 
 module.exports = {

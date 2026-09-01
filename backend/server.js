@@ -4,6 +4,7 @@ const { loadEnv } = require('./config/env')
 loadEnv()
 
 const { runMigrations } = require('./db/migrate')
+const { databasePath, queryJson } = require('./db/sqlite')
 const { handleBotRoute } = require('./routes/bot')
 
 const port = Number(process.env.PORT || 3001)
@@ -24,7 +25,16 @@ const server = http.createServer((request, response) => {
   }
 
   if (url.pathname === '/health') {
-    sendJson(response, 200, { status: 'ok' })
+    const migrations = queryJson('SELECT id, applied_at FROM schema_migrations ORDER BY id;')
+
+    sendJson(response, 200, {
+      status: 'ok',
+      database: {
+        path: databasePath,
+        migrations,
+      },
+      botConfigured: Boolean(process.env.BOT_TOKEN),
+    })
     return
   }
 
