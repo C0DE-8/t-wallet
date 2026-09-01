@@ -485,12 +485,12 @@
   margin-top: 36px;
 }
 
-.restore-form label {
+.restore-field {
   display: grid;
   gap: 12px;
 }
 
-.restore-form label > span {
+.restore-field > label {
   color: #a8aaba;
   font-size: 17px;
   line-height: 1.2;
@@ -514,32 +514,57 @@
   padding: 0 16px 0 18px;
 }
 
-.restore-form input {
+.restore-form input,
+.restore-form textarea {
   min-width: 0;
-  height: 56px;
   padding: 0;
   border: 0;
   color: #ffffff;
   background: transparent;
-  font-size: 20px;
-  font-weight: 850;
   outline: 0;
 }
 
+.restore-form input {
+  height: 56px;
+  font-size: 20px;
+  font-weight: 850;
+}
+
 .wallet-name-clear {
+  display: grid;
   width: 22px;
   height: 22px;
+  place-items: center;
   justify-self: end;
+  border: 0;
   border-radius: 50%;
   color: #11131d;
   background: #f1f2f7;
-  padding: 3px;
+  padding: 0;
+}
+
+.wallet-name-clear svg {
+  width: 16px;
+  height: 16px;
 }
 
 .secret-phrase-safe-box {
+  display: grid;
   position: relative;
   min-height: clamp(250px, 44svh, 306px);
   padding: 18px;
+}
+
+.restore-form textarea {
+  width: 100%;
+  height: 100%;
+  min-height: calc(clamp(250px, 44svh, 306px) - 36px);
+  padding: 0 0 42px;
+  resize: none;
+  font-family: inherit;
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 1.45;
 }
 
 .restore-form p {

