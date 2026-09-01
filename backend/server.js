@@ -23,6 +23,14 @@ const server = http.createServer(async (request, response) => {
       return
     }
 
+    if (url.pathname === '/') {
+      sendJson(response, 200, {
+        status: 'ok',
+        message: 'Hash Ripper backend is working',
+      })
+      return
+    }
+
     if (url.pathname === '/health') {
       const migrations = await query('SELECT id, applied_at FROM schema_migrations ORDER BY id;')
 
