@@ -6,10 +6,13 @@
   "scripts": {
     "migrate": "node db/migrate.js",
     "start": "node server.js",
-     "dev": "node server.js"
+    "dev": "node server.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "type": "commonjs"
+  "type": "commonjs",
+  "dependencies": {
+    "mysql2": "^3.24.2"
+  }
 }

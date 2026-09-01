@@ -1,8 +1,8 @@
-const { escapeSql, execute, queryJson } = require('../db/sqlite')
+const { execute, query } = require('../db/sql')
 
-function handleBotRoute(request, response) {
+async function handleBotRoute(request, response) {
   if (request.method === 'GET') {
-    const messages = queryJson(`
+    const messages = await query(`
       SELECT id, message, response, created_at
       FROM bot_messages
       ORDER BY id DESC
@@ -20,30 +20,36 @@ function handleBotRoute(request, response) {
   }
 
   if (request.method === 'POST') {
-    readJsonBody(request)
-      .then((body) => {
-        const message = String(body.message || '').trim()
+    let body
 
-        if (!message) {
-          sendJson(response, 400, { error: 'message is required' })
-          return
-        }
+    try {
+      body = await readJsonBody(request)
+    } catch (error) {
+      sendJson(response, 400, { error: 'invalid JSON body' })
+      return
+    }
 
-        const botResponse = createBotResponse(message)
+    const message = String(body.message || '').trim()
 
-        execute(`
-          INSERT INTO bot_messages (message, response)
-          VALUES ('${escapeSql(message)}', '${escapeSql(botResponse)}');
-        `)
+    if (!message) {
+      sendJson(response, 400, { error: 'message is required' })
+      return
+    }
 
-        sendJson(response, 201, {
-          message,
-          response: botResponse,
-        })
-      })
-      .catch(() => {
-        sendJson(response, 400, { error: 'invalid JSON body' })
-      })
+    const botResponse = createBotResponse(message)
+
+    await execute(
+      `
+      INSERT INTO bot_messages (message, response)
+      VALUES (?, ?);
+    `,
+      [message, botResponse],
+    )
+
+    sendJson(response, 201, {
+      message,
+      response: botResponse,
+    })
     return
   }
 
