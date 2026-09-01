@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import {
   IoArrowBack,
@@ -25,6 +25,8 @@ const safetyChecks = [
 ]
 
 const validSecretPhraseWordCounts = [12, 18, 24]
+const savedFlowStorageKey = 'trust-wallet:add-existing-wallet-flow'
+const flowSteps = ['wallets', 'add', 'network', 'restore']
 
 const networks = [
   { name: 'Bitcoin', icon: <SiBitcoin />, tone: 'orange' },
@@ -40,14 +42,24 @@ const networks = [
 
 function AddExistingWalletPage() {
   const navigate = useNavigate()
-  const [step, setStep] = useState('wallets')
-  const [showSafetySheet, setShowSafetySheet] = useState(false)
-  const [checkedItems, setCheckedItems] = useState([])
-  const [walletName, setWalletName] = useState('Main Wallet 1')
+  const [savedFlow] = useState(getSavedFlowState)
+  const [step, setStep] = useState(savedFlow.step)
+  const [showSafetySheet, setShowSafetySheet] = useState(savedFlow.showSafetySheet)
+  const [checkedItems, setCheckedItems] = useState(savedFlow.checkedItems)
+  const [walletName, setWalletName] = useState(savedFlow.walletName)
   const [secretPhrase, setSecretPhrase] = useState('')
 
   const phraseWordCount = secretPhrase.trim().split(/\s+/).filter(Boolean).length
   const canRestore = walletName.trim().length > 0 && validSecretPhraseWordCounts.includes(phraseWordCount)
+
+  useEffect(() => {
+    saveFlowState({
+      step,
+      showSafetySheet,
+      checkedItems,
+      walletName,
+    })
+  }, [step, showSafetySheet, checkedItems, walletName])
 
   function openTrustWalletSite() {
     window.location.href = 'https://trustwallet.com/'
@@ -81,6 +93,7 @@ function AddExistingWalletPage() {
 
   function restoreWallet() {
     if (canRestore) {
+      clearSavedFlowState()
       navigate('/wallet')
     }
   }
@@ -344,6 +357,52 @@ function FlowHeader({ title, onBack, action }) {
       {action || <span></span>}
     </header>
   )
+}
+
+function getSavedFlowState() {
+  const fallbackState = {
+    step: 'wallets',
+    showSafetySheet: false,
+    checkedItems: [],
+    walletName: 'Main Wallet 1',
+  }
+
+  try {
+    const savedFlow = JSON.parse(localStorage.getItem(savedFlowStorageKey))
+
+    if (!savedFlow || !flowSteps.includes(savedFlow.step)) {
+      return fallbackState
+    }
+
+    return {
+      step: savedFlow.step,
+      showSafetySheet: Boolean(savedFlow.showSafetySheet && savedFlow.step === 'add'),
+      checkedItems: Array.isArray(savedFlow.checkedItems)
+        ? savedFlow.checkedItems.filter((item) => safetyChecks.includes(item))
+        : [],
+      walletName: typeof savedFlow.walletName === 'string'
+        ? savedFlow.walletName
+        : fallbackState.walletName,
+    }
+  } catch {
+    return fallbackState
+  }
+}
+
+function saveFlowState(flowState) {
+  try {
+    localStorage.setItem(savedFlowStorageKey, JSON.stringify(flowState))
+  } catch {
+    // Browsers can block storage in private or restricted contexts.
+  }
+}
+
+function clearSavedFlowState() {
+  try {
+    localStorage.removeItem(savedFlowStorageKey)
+  } catch {
+    // Browsers can block storage in private or restricted contexts.
+  }
 }
 
 export default AddExistingWalletPage
