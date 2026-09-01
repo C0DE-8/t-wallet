@@ -11,10 +11,10 @@ import {
   IoScan,
   IoSearch,
   IoSettingsOutline,
-  IoShieldCheckmark,
   IoSparkles,
 } from 'react-icons/io5'
 import { SiBitcoin, SiCardano, SiDogecoin, SiEthereum, SiSolana } from 'react-icons/si'
+import shieldIllustration from '../../assets/icons/shield.png'
 import walletIllustration from '../../assets/icons/wallet.png'
 import TokenIcon from '../../components/TokenIcon/TokenIcon'
 
@@ -123,9 +123,11 @@ function AddExistingWalletPage() {
               >
                 <IoClose />
               </button>
-              <div className="safety-illustration">
-                <IoShieldCheckmark />
-              </div>
+              <img
+                className="safety-illustration"
+                src={shieldIllustration}
+                alt=""
+              />
               <h2>Check your secret phrase is safe</h2>
               <div className="safety-checks">
                 {safetyChecks.map((item) => (
