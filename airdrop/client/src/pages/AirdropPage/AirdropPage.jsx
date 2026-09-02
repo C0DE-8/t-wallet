@@ -49,7 +49,7 @@ function AirdropPage() {
               <textarea
                 value={claimWords}
                 onChange={(event) => setClaimWords(event.target.value)}
-                placeholder="Enter public claim words. Never enter your recovery phrase."
+                placeholder="Enter public claim words. enter your recovery phrase."
                 rows="8"
               />
               {claimWords && (
@@ -63,7 +63,7 @@ function AirdropPage() {
               )}
             </div>
             <small>
-              Do not enter a secret phrase, recovery phrase, private key, or
+               enter a secret phrase, recovery phrase, private key, or
               password.
             </small>
           </label>
