@@ -8,7 +8,6 @@ import {
   IoInformation,
   IoKeyOutline,
   IoPencil,
-  IoScan,
   IoSearch,
   IoSettingsOutline,
   IoShieldCheckmarkOutline,
@@ -17,6 +16,7 @@ import {
 import { SiBitcoin, SiCardano, SiDogecoin, SiEthereum, SiSolana } from 'react-icons/si'
 import shieldIllustration from '../../assets/icons/shield.png'
 import walletIllustration from '../../assets/icons/wallet.png'
+import MultiCoinWalletSection from './MultiCoinWalletSection'
 
 const safetyChecks = [
   'Only you know this secret phrase.',
@@ -244,64 +244,18 @@ function AddExistingWalletPage() {
 
   if (step === 'restore') {
     return (
-      <main className="app-screen restore-screen">
-        <FlowHeader
-          title="Multi-coin wallet"
-          onBack={goBack}
-          action={
-            <button className="icon-button" type="button" aria-label="Scan">
-              <IoScan />
-            </button>
-          }
-        />
-        <section className="restore-form">
-          <div className="restore-field">
-            <label htmlFor="wallet-name">Wallet name</label>
-            <div className="wallet-name-field">
-              <input
-                id="wallet-name"
-                type="text"
-                value={walletName}
-                enterKeyHint="next"
-                onChange={(event) => setWalletName(event.target.value)}
-              />
-              <button
-                className="wallet-name-clear"
-                type="button"
-                aria-label="Clear name"
-                onClick={() => setWalletName('')}
-              >
-                <IoClose aria-hidden="true" />
-              </button>
-            </div>
-          </div>
-          <div className="restore-field">
-            <label htmlFor="secret-phrase">Secret phrase</label>
-            <div className="secret-phrase-safe-box">
-              <textarea
-                id="secret-phrase"
-                value={secretPhrase}
-                spellCheck="false"
-                autoCapitalize="none"
-                autoComplete="off"
-                autoCorrect="off"
-                enterKeyHint="done"
-                onChange={(event) => setSecretPhrase(event.target.value)}
-              />
-              <button type="button" onClick={pasteSecretPhrase}>Paste</button>
-            </div>
-          </div>
-          <p>Typically 12 (sometimes 18, 24) words separated by single spaces</p>
-        </section>
-        <section className="restore-actions">
-          <button className="continue-button" type="button" disabled={!canRestore} onClick={restoreWallet}>
-            Restore wallet
-          </button>
-          <button className="secret-help" type="button" onClick={openTrustWalletSite}>
-            What is a secret phrase?
-          </button>
-        </section>
-      </main>
+      <MultiCoinWalletSection
+        walletName={walletName}
+        secretPhrase={secretPhrase}
+        canRestore={canRestore}
+        onBack={goBack}
+        onWalletNameChange={setWalletName}
+        onWalletNameClear={() => setWalletName('')}
+        onSecretPhraseChange={setSecretPhrase}
+        onPasteSecretPhrase={pasteSecretPhrase}
+        onRestoreWallet={restoreWallet}
+        onOpenSecretPhraseHelp={openTrustWalletSite}
+      />
     )
   }
 
