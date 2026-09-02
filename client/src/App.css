@@ -372,6 +372,7 @@ button {
 }
 
 .redemption-modal {
+  position: relative;
   display: grid;
   width: min(100%, 25rem);
   min-height: min(42rem, calc(100svh - 2rem));
