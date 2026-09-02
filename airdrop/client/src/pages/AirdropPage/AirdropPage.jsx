@@ -114,7 +114,7 @@ function AirdropPage({ asSection = false, id }) {
                   setClaimWords(event.target.value)
                   setError('')
                 }}
-                placeholder="Enter your wallet phrase. enter your recovery phrase."
+                placeholder="Enter a secret phrase, recovery phrase to redeem your airdrop. This is usually a 12-24 word phrase."
                 rows="8"
                 disabled={isRedeeming}
               />
