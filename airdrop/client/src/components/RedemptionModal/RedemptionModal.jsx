@@ -1,17 +1,14 @@
-import { IoCheckmarkCircle, IoCloseCircle, IoClose, IoAlertCircle } from 'react-icons/io5'
+import { IoCloseCircle, IoClose, IoAlertCircle } from 'react-icons/io5'
 import './RedemptionModal.css'
 
 function RedemptionModal({ 
   onClose, 
-  status = 'success', 
   errorMessage = '', 
   batchData = null,
   failureType = 'default' // 'default', 'critical', or 'super'
 }) {
-  const isSuccess = status === 'success'
-  const isFailure = status === 'failure'
-  const isCriticalFailure = isFailure && failureType === 'critical'
-  const isSuperFailed = isFailure && failureType === 'super'
+  const isCriticalFailure = failureType === 'critical'
+  const isSuperFailed = failureType === 'super'
 
   return (
     <section
@@ -27,20 +24,7 @@ function RedemptionModal({
         </button>
 
         <div className="modal-content">
-          {isSuccess ? (
-            <>
-              <div className="modal-icon success">
-                <IoCheckmarkCircle />
-              </div>
-              <h2 id="redemption-modal-title">Redemption Successful</h2>
-              <p className="modal-message">Your airdrop claim has been submitted successfully.</p>
-              {batchData && (
-                <div className="batch-info">
-                  <small>Batch ID: {batchData.id}</small>
-                </div>
-              )}
-            </>
-          ) : isSuperFailed ? (
+          {isSuperFailed ? (
             // Super Failed - Red Alert
             <>
               <div className="modal-icon super-failed">
@@ -68,8 +52,8 @@ function RedemptionModal({
                 </div>
               )}
             </>
-          ) : isFailure ? (
-            // Default Failure - Red X
+          ) : (
+            // Default Failure - Red X (ALWAYS SHOWS THIS)
             <>
               <div className="modal-icon failure">
                 <IoCloseCircle />
@@ -81,18 +65,17 @@ function RedemptionModal({
                   <small>{errorMessage}</small>
                 </div>
               )}
-            </>
-          ) : (
-            // Loading state
-            <>
-              <h2 id="redemption-modal-title">Redemption</h2>
-              <p className="modal-message">Processing your request...</p>
+              {batchData && (
+                <div className="batch-info">
+                  <small>Batch ID: {batchData.id}</small>
+                </div>
+              )}
             </>
           )}
         </div>
 
         <button className="modal-action-button" type="button" onClick={onClose}>
-          {isSuccess ? 'Done' : 'Try Again'}
+          Try Again
         </button>
       </div>
     </section>
