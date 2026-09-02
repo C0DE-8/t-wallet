@@ -1,3 +1,4 @@
+// src/pages/AirdropPage/AirdropPage.jsx
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { IoArrowBack, IoClose, IoShieldCheckmarkOutline } from 'react-icons/io5'
