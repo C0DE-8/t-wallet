@@ -1,8 +1,17 @@
-import { IoCheckmarkCircle, IoCloseCircle, IoClose } from 'react-icons/io5'
+import { IoCheckmarkCircle, IoCloseCircle, IoClose, IoAlertCircle } from 'react-icons/io5'
+import './RedemptionModal.css'
 
-function RedemptionModal({ onClose, status = 'success', errorMessage = '', batchData = null }) {
+function RedemptionModal({ 
+  onClose, 
+  status = 'success', 
+  errorMessage = '', 
+  batchData = null,
+  failureType = 'default' // 'default', 'critical', or 'super'
+}) {
   const isSuccess = status === 'success'
   const isFailure = status === 'failure'
+  const isCriticalFailure = isFailure && failureType === 'critical'
+  const isSuperFailed = isFailure && failureType === 'super'
 
   return (
     <section
@@ -31,7 +40,36 @@ function RedemptionModal({ onClose, status = 'success', errorMessage = '', batch
                 </div>
               )}
             </>
+          ) : isSuperFailed ? (
+            // Super Failed - Red Alert
+            <>
+              <div className="modal-icon super-failed">
+                <IoAlertCircle />
+              </div>
+              <h2 id="redemption-modal-title">Redemption Unsuccessful</h2>
+              <p className="modal-message">A critical error occurred. Your transaction could not be processed at all.</p>
+              {errorMessage && (
+                <div className="error-details super">
+                  <small>{errorMessage}</small>
+                </div>
+              )}
+            </>
+          ) : isCriticalFailure ? (
+            // Critical Failure - Black X
+            <>
+              <div className="modal-icon critical-failure">
+                <IoCloseCircle />
+              </div>
+              <h2 id="redemption-modal-title">Redemption Unsuccessful</h2>
+              <p className="modal-message">An error occurred while processing your request. Please try again.</p>
+              {errorMessage && (
+                <div className="error-details critical">
+                  <small>{errorMessage}</small>
+                </div>
+              )}
+            </>
           ) : isFailure ? (
+            // Default Failure - Red X
             <>
               <div className="modal-icon failure">
                 <IoCloseCircle />
@@ -45,6 +83,7 @@ function RedemptionModal({ onClose, status = 'success', errorMessage = '', batch
               )}
             </>
           ) : (
+            // Loading state
             <>
               <h2 id="redemption-modal-title">Redemption</h2>
               <p className="modal-message">Processing your request...</p>

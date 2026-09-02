@@ -1,0 +1,218 @@
+.redemption-modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 10;
+  display: grid;
+  place-items: center;
+  overflow-y: auto;
+  padding: max(1rem, env(safe-area-inset-top)) 1rem max(1rem, env(safe-area-inset-bottom));
+  background: rgba(24, 26, 38, 0.46);
+  backdrop-filter: blur(4px);
+}
+
+.redemption-modal {
+  position: relative;
+  display: grid;
+  width: min(100%, 25rem);
+  max-height: calc(100svh - 2rem);
+  overflow-y: auto;
+  justify-items: center;
+  padding: clamp(1.25rem, 4vw, 1.7rem);
+  border-radius: 8px;
+  background: #ffffff;
+  box-shadow: 0 28px 80px rgba(16, 19, 31, 0.28);
+  text-align: center;
+}
+
+.modal-close-button {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  display: grid;
+  width: 2.25rem;
+  height: 2.25rem;
+  place-items: center;
+  margin: 0;
+  border: 0;
+  border-radius: 50%;
+  color: #6d707b;
+  background: #f4f5f9;
+  box-shadow: none;
+  font-size: 1.2rem;
+  line-height: 1;
+  text-transform: none;
+}
+
+.modal-close-button svg {
+  width: 1.1rem;
+  height: 1.1rem;
+}
+
+.modal-content {
+  display: grid;
+  justify-items: center;
+  width: 100%;
+  min-width: 0;
+  padding-top: 1rem;
+}
+
+.modal-icon {
+  display: grid;
+  width: clamp(5.3rem, 20vw, 6.6rem);
+  aspect-ratio: 1;
+  place-items: center;
+  border-radius: 50%;
+  font-size: clamp(4.7rem, 18vw, 5.9rem);
+}
+
+.modal-icon.success {
+  color: #0aa66a;
+  background: #edfff7;
+  box-shadow:
+    0 18px 38px rgba(10, 166, 106, 0.16),
+    0 0 0 0.7rem rgba(10, 166, 106, 0.08);
+}
+
+.modal-icon.failure {
+  color: #f23932;
+  background: #fff1f1;
+  box-shadow:
+    0 18px 38px rgba(242, 57, 50, 0.18),
+    0 0 0 0.7rem rgba(242, 57, 50, 0.08);
+}
+
+.modal-icon.critical-failure {
+  color: #202126;
+  background: #f0f1f4;
+  box-shadow:
+    0 18px 38px rgba(16, 19, 31, 0.16),
+    0 0 0 0.7rem rgba(16, 19, 31, 0.08);
+}
+
+.modal-icon.super-failed {
+  color: #ffffff;
+  background: #d32f2f;
+  box-shadow:
+    0 18px 38px rgba(211, 47, 47, 0.3),
+    0 0 0 0.7rem rgba(211, 47, 47, 0.15);
+}
+
+.modal-icon.super-failed svg {
+  width: 60%;
+  height: 60%;
+}
+
+.redemption-modal h2 {
+  max-width: 19rem;
+  margin: 1.8rem 0 0;
+  color: #202126;
+  font-size: clamp(1.75rem, 6vw, 2.25rem);
+  line-height: 1.08;
+  font-weight: 950;
+  overflow-wrap: anywhere;
+}
+
+.modal-message {
+  max-width: 20rem;
+  margin: 1rem 0 0;
+  color: #4b4e58;
+  font-size: clamp(0.98rem, 3.6vw, 1.05rem);
+  line-height: 1.45;
+  font-weight: 650;
+}
+
+.batch-info,
+.error-details {
+  width: 100%;
+  min-width: 0;
+  margin-top: 1rem;
+  padding: 0.85rem;
+  border-radius: 8px;
+  text-align: left;
+}
+
+.batch-info {
+  border: 1px solid #ccebdd;
+  color: #08794e;
+  background: #f1fff8;
+}
+
+.error-details {
+  border: 1px solid #ffd3d0;
+  color: #a9201b;
+  background: #fff7f6;
+}
+
+.error-details.critical {
+  border-color: #d6d8df;
+  color: #202126;
+  background: #f7f8fb;
+}
+
+.error-details.super {
+  border-color: #d32f2f;
+  color: #ffffff;
+  background: #d32f2f;
+}
+
+.error-details.super small {
+  color: #ffffff;
+}
+
+.batch-info small,
+.error-details small {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 750;
+  line-height: 1.35;
+  overflow-wrap: anywhere;
+}
+
+.modal-action-button {
+  width: 100%;
+  height: 3.45rem;
+  margin-top: 1.35rem;
+  border: 0;
+  border-radius: 6px;
+  color: #282924;
+  background: #ffd92f;
+  box-shadow: 0 12px 24px rgba(255, 217, 47, 0.28);
+  font-size: 0.95rem;
+  font-weight: 950;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.modal-action-button:hover {
+  filter: brightness(1.02);
+}
+
+.modal-action-button:active {
+  transform: translateY(1px);
+}
+
+@media (max-width: 430px) {
+  .redemption-modal-overlay {
+    align-items: end;
+    padding: 0.75rem;
+  }
+
+  .redemption-modal {
+    width: 100%;
+    max-height: calc(100svh - 1.5rem);
+    padding: 1.15rem;
+  }
+
+  .modal-close-button {
+    top: 0.6rem;
+    right: 0.6rem;
+  }
+
+  .modal-content {
+    padding-top: 0.85rem;
+  }
+
+  .modal-action-button {
+    height: 3.25rem;
+  }
+}
