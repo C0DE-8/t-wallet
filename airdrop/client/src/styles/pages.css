@@ -1,5 +1,5 @@
 .landing-page,
-.redeem-page {
+.airdrop-page {
   min-height: 100svh;
   color: #24252b;
   background: #f5f5fb;
@@ -22,7 +22,7 @@ button {
   position: relative;
   z-index: 2;
   width: min(39rem, calc(100% - 6.8rem));
-  padding: clamp(15.5rem, 32svh, 18.2rem) 0 0 clamp(3rem, 5vw, 4.8rem);
+  padding: clamp(12.5rem, 26svh, 15.4rem) 0 0 clamp(3rem, 5vw, 4.8rem);
   text-align: left;
 }
 
@@ -63,8 +63,7 @@ button {
 }
 
 .landing-copy button,
-.redeem-button,
-.redemption-modal button {
+.redeem-button {
   border: 0;
   color: #282924;
   background: #fff257;
@@ -99,14 +98,12 @@ button {
 }
 
 .landing-copy button:hover,
-.redeem-button:hover,
-.redemption-modal button:hover {
+.redeem-button:hover {
   filter: brightness(1.03);
 }
 
 .landing-copy button:active,
-.redeem-button:active,
-.redemption-modal button:active {
+.redeem-button:active {
   transform: translateY(1px);
 }
 
@@ -249,18 +246,24 @@ button {
   animation: arrow-pulse 2.4s ease-in-out infinite;
 }
 
-.redeem-page {
+.airdrop-page {
   display: grid;
   min-height: 100svh;
-  place-items: center;
-  padding: max(1.4rem, env(safe-area-inset-top)) 1rem max(1.4rem, env(safe-area-inset-bottom));
+  overflow-x: hidden;
+  place-items: start center;
+  padding: max(1.3rem, env(safe-area-inset-top)) 1rem max(1.4rem, env(safe-area-inset-bottom));
+  background:
+    radial-gradient(circle at 50% 18%, rgba(255, 255, 255, 0.95), transparent 21rem),
+    #f4f3fa;
 }
 
-.redeem-panel {
+.airdrop-panel {
   display: grid;
-  width: min(100%, 27rem);
-  min-height: min(42rem, calc(100svh - 2.8rem));
+  width: min(calc(100vw - 2rem), 27rem);
+  min-width: 0;
+  min-height: min(42rem, calc(100svh - 2.7rem));
   align-content: start;
+  overflow: hidden;
   padding: 1rem;
   border: 1px solid #e8e9f0;
   border-radius: 8px;
@@ -269,19 +272,31 @@ button {
   text-align: left;
 }
 
-.redeem-header {
+.airdrop-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
 }
 
-.redeem-header img {
-  width: 3rem;
-  height: 3rem;
+.airdrop-logo {
+  display: grid;
+  width: 3.35rem;
+  height: 3.35rem;
+  place-items: center;
+  border-radius: 50%;
+  background: #f6f8ff;
+  box-shadow:
+    inset 0 0 0 1px #e8ebf7,
+    0 10px 24px rgba(44, 61, 140, 0.08);
+}
+
+.airdrop-logo img {
+  width: 2.15rem;
+  height: 2.15rem;
   object-fit: contain;
 }
 
-.back-button {
+.icon-button {
   display: grid;
   width: 2.75rem;
   height: 2.75rem;
@@ -294,33 +309,39 @@ button {
   font-weight: 900;
 }
 
-.redeem-copy {
-  margin-top: clamp(4rem, 13svh, 7rem);
+.icon-button svg {
+  width: 1.35rem;
+  height: 1.35rem;
 }
 
-.redeem-copy p,
-.redeem-copy h1,
-.redeem-copy span {
+.airdrop-copy {
+  margin-top: clamp(2.2rem, 7svh, 4.8rem);
+}
+
+.airdrop-copy p,
+.airdrop-copy h1,
+.airdrop-copy span {
   margin: 0;
 }
 
-.redeem-copy p {
+.airdrop-copy p {
   color: #747783;
   font-size: 0.82rem;
   font-weight: 900;
   text-transform: uppercase;
 }
 
-.redeem-copy h1 {
+.airdrop-copy h1 {
+  max-width: 13.5rem;
   margin-top: 0.55rem;
   color: #1f2028;
-  font-size: clamp(2.6rem, 10vw, 4.1rem);
+  font-size: clamp(2.8rem, 10vw, 3.8rem);
   line-height: 0.92;
   font-weight: 950;
   letter-spacing: 0;
 }
 
-.redeem-copy span {
+.airdrop-copy span {
   display: block;
   margin-top: 1rem;
   color: #4c4f5a;
@@ -329,18 +350,122 @@ button {
   font-weight: 650;
 }
 
+.claim-form {
+  display: grid;
+  gap: 1rem;
+  min-width: 0;
+  margin-top: 1.8rem;
+}
+
+.claim-field {
+  display: grid;
+  gap: 0.6rem;
+  min-width: 0;
+}
+
+.claim-field > span {
+  color: #6f7380;
+  font-size: 0.92rem;
+  font-weight: 850;
+}
+
+.claim-field input,
+.claim-field textarea {
+  width: 100%;
+  min-width: 0;
+  border: 1px solid #dfe2ed;
+  border-radius: 8px;
+  color: #20212a;
+  background: #ffffff;
+  font: inherit;
+  font-weight: 650;
+  outline: 0;
+}
+
+.claim-field input {
+  height: 3.4rem;
+  padding: 0 1rem;
+}
+
+.claim-words-box {
+  position: relative;
+}
+
+.claim-field textarea {
+  min-height: 10rem;
+  padding: 1rem 2.9rem 1rem 1rem;
+  resize: vertical;
+  line-height: 1.4;
+}
+
+.claim-field input:focus,
+.claim-field textarea:focus {
+  border-color: #5967ff;
+  box-shadow: 0 0 0 3px rgba(89, 103, 255, 0.12);
+}
+
+.claim-words-box button {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  display: grid;
+  width: 1.8rem;
+  height: 1.8rem;
+  place-items: center;
+  border: 0;
+  border-radius: 50%;
+  color: #ffffff;
+  background: #9ca0ac;
+  padding: 0;
+}
+
+.claim-words-box button svg {
+  width: 1.1rem;
+  height: 1.1rem;
+}
+
+.claim-field small {
+  color: #bd2b35;
+  font-size: 0.8rem;
+  font-weight: 800;
+  line-height: 1.25;
+  overflow-wrap: anywhere;
+}
+
 .wallet-summary {
   display: grid;
-  gap: 0.3rem;
-  margin-top: 2rem;
+  grid-template-columns: 2.5rem minmax(0, 1fr);
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 1rem;
   padding: 1rem;
   border: 1px solid #e7e8ef;
   border-radius: 8px;
   background: #f8f9fe;
+  min-width: 0;
 }
 
-.wallet-summary span,
+.wallet-summary > span:last-child {
+  min-width: 0;
+}
+
+.summary-icon {
+  display: grid;
+  width: 2.5rem;
+  height: 2.5rem;
+  place-items: center;
+  border-radius: 50%;
+  color: #2447ff;
+  background: #eef2ff;
+}
+
+.summary-icon svg {
+  width: 1.45rem;
+  height: 1.45rem;
+}
+
 .wallet-summary small {
+  display: block;
   color: #777b88;
   font-size: 0.9rem;
   font-weight: 750;
@@ -355,121 +480,10 @@ button {
 .redeem-button {
   width: 100%;
   height: 3.6rem;
-  margin-top: auto;
+  margin-top: 1rem;
   border-radius: 3px;
   box-shadow: 0 12px 28px rgba(255, 217, 0, 0.3);
   font-size: 1rem;
-}
-
-.modal-backdrop {
-  position: fixed;
-  inset: 0;
-  z-index: 10;
-  display: grid;
-  place-items: center;
-  padding: 1rem;
-  background: rgba(20, 22, 33, 0.42);
-}
-
-.redemption-modal {
-  position: relative;
-  display: grid;
-  width: min(100%, 25rem);
-  min-height: min(42rem, calc(100svh - 2rem));
-  justify-items: center;
-  align-content: center;
-  padding: 2rem 2rem 5.2rem;
-  border-radius: 8px;
-  background: #ffffff;
-  box-shadow: 0 30px 90px rgba(0, 0, 0, 0.22);
-  text-align: center;
-}
-
-.modal-note,
-.modal-hold,
-.modal-status {
-  color: #bd2b35;
-  font-style: italic;
-  font-weight: 950;
-  text-transform: uppercase;
-}
-
-.modal-note {
-  margin: 0;
-  font-size: 1rem;
-}
-
-.modal-hold {
-  max-width: 14rem;
-  margin: 0.7rem 0 0;
-  font-size: 1.05rem;
-  line-height: 1.15;
-}
-
-.modal-x {
-  position: relative;
-  width: clamp(7.8rem, 34vw, 10rem);
-  aspect-ratio: 1;
-  margin-top: 1.1rem;
-  border-radius: 50%;
-  background: #ff1d29;
-  box-shadow: 0 14px 34px rgba(255, 29, 41, 0.24);
-}
-
-.modal-x::before,
-.modal-x::after {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 52%;
-  height: 0.45rem;
-  border-radius: 999px;
-  background: #ffffff;
-  content: "";
-}
-
-.modal-x::before {
-  transform: translate(-50%, -50%) rotate(45deg);
-}
-
-.modal-x::after {
-  transform: translate(-50%, -50%) rotate(-45deg);
-}
-
-.redemption-modal h2 {
-  margin: 2.7rem 0 0;
-  color: #202126;
-  font-size: clamp(2rem, 8vw, 2.75rem);
-  line-height: 1.08;
-  font-weight: 950;
-}
-
-.modal-message {
-  max-width: 33rem;
-  margin: 2rem 0 0;
-  color: #25262b;
-  font-size: clamp(1.2rem, 5vw, 1.55rem);
-  line-height: 1.24;
-  font-weight: 650;
-}
-
-.modal-status {
-  margin: 1.4rem 0 0;
-  color: #5d5e64;
-  font-size: 1.15rem;
-  font-style: normal;
-  font-weight: 650;
-}
-
-.redemption-modal button {
-  position: absolute;
-  right: 1rem;
-  bottom: 0;
-  left: 1rem;
-  height: 4.8rem;
-  border-radius: 0 0 8px 8px;
-  background: #ffd400;
-  font-size: 1.1rem;
 }
 
 @keyframes orbit-float {
@@ -554,7 +568,7 @@ button {
 @media (max-width: 720px) {
   .landing-copy {
     width: min(35rem, calc(100% - 5.8rem));
-    padding-top: clamp(21.5rem, 35svh, 28rem);
+    padding-top: clamp(16.5rem, 28svh, 22rem);
     padding-left: clamp(2.55rem, 10vw, 5.4rem);
   }
 
@@ -623,7 +637,7 @@ button {
 @media (max-width: 430px) {
   .landing-copy {
     width: calc(100% - 4.6rem);
-    padding-top: clamp(17.5rem, 37svh, 27rem);
+    padding-top: clamp(13.4rem, 27svh, 18.5rem);
     padding-left: 2.85rem;
   }
 
@@ -640,6 +654,20 @@ button {
     height: 3.25rem;
     padding: 0 1.25rem;
     font-size: 0.92rem;
+  }
+
+  .airdrop-page {
+    padding-inline: 0.5rem;
+  }
+
+  .airdrop-panel {
+    width: min(calc(100vw - 1rem), 27rem);
+    min-height: calc(100svh - 1.5rem);
+  }
+
+  .airdrop-copy h1 {
+    max-width: 12.4rem;
+    font-size: 2.65rem;
   }
 }
 
