@@ -257,6 +257,11 @@ button {
     #f4f3fa;
 }
 
+.airdrop-section {
+  scroll-margin-top: 1rem;
+  padding-block: max(3rem, env(safe-area-inset-top)) max(3rem, env(safe-area-inset-bottom));
+}
+
 .airdrop-panel {
   display: grid;
   width: min(calc(100vw - 2rem), 27rem);
@@ -682,6 +687,10 @@ button {
 
   .airdrop-page {
     padding-inline: 0.5rem;
+  }
+
+  .airdrop-section {
+    padding-block: 1rem;
   }
 
   .airdrop-panel {

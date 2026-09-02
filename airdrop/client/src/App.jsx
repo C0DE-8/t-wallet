@@ -1,5 +1,4 @@
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
-import AirdropPage from './pages/AirdropPage/AirdropPage'
 import LandingPage from './pages/LandingPage/LandingPage'
 import './styles/pages.css'
 import './styles/components.css'
@@ -9,7 +8,7 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<LandingPage />} />
-        <Route path="/airdrop" element={<AirdropPage />} />
+        <Route path="/airdrop" element={<LandingPage />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </BrowserRouter>
