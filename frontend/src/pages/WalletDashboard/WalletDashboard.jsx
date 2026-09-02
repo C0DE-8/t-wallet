@@ -58,7 +58,7 @@ function WalletDashboard() {
           onClick={toggleBalances}
           aria-label={hideBalances ? 'Show balances' : 'Hide balances'}
         >
-          <p className="portfolio-value">{hideBalances ? '*****' : '$120.58'}</p>
+          <p className="portfolio-value">{hideBalances ? '*****' : '$8,120.58'}</p>
           <p className="portfolio-change">{hideBalances ? '*****' : '$0.00 (0.00%)'}</p>
         </button>
 

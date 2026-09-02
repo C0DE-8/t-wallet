@@ -1,5 +1,5 @@
 export const assets = [
-  { name: 'Tether USD', ticker: 'USDT', amount: '120.6 USDT', value: '$120.58', tone: 'teal' },
+  { name: 'Tether USD', ticker: 'USDT', amount: '8,120.6 USDT', value: '$8,120.58', tone: 'teal' },
   { name: 'Bitcoin', ticker: 'BTC', amount: '0 BTC', value: '$0.00', tone: 'orange' },
   { name: 'Ethereum', ticker: 'ETH', amount: '0 ETH', value: '$0.00', tone: 'blue' },
   { name: 'BNB', ticker: 'BNB', amount: '0 BNB', value: '$0.00', tone: 'yellow' },
