@@ -11,11 +11,14 @@ function LandingPage() {
         <span className="landing-cursor landing-cursor-top" aria-hidden="true" />
         <span className="landing-cursor landing-cursor-side" aria-hidden="true" />
 
-        <img
-          className="landing-shield landing-shield-primary"
-          src={trustShield}
-          alt=""
-        />
+        <div className="landing-orbit" aria-hidden="true">
+          <span className="landing-orbit-ring" />
+          <img
+            className="landing-shield landing-shield-primary"
+            src={trustShield}
+            alt=""
+          />
+        </div>
         <img
           className="landing-shield landing-shield-small"
           src={trustShield}
