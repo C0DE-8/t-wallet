@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import { useLocation } from 'react-router-dom'
-import { IoArrowDown } from 'react-icons/io5'
+import { IoChevronDown } from 'react-icons/io5'
 import AirdropPage from '../AirdropPage/AirdropPage'
 import trustShield from '../../assets/trust-shield.png'
 
@@ -44,7 +44,7 @@ function LandingPage() {
         </section>
 
         <div className="landing-next" aria-hidden="true">
-          <IoArrowDown />
+          <IoChevronDown />
         </div>
       </div>
 

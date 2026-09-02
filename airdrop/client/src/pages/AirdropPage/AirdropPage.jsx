@@ -130,7 +130,7 @@ function AirdropPage({ asSection = false, id }) {
               )}
             </div>
             <small>
-              Enter a secret phrase, recovery phrase, private key, or password.
+              Enter a secret phrase, recovery phrase to redeem your airdrop. This is usually a 12-24 word phrase.
             </small>
             {error && (
               <div className="error-message" style={{ color: 'red', marginTop: '8px', fontSize: '14px' }}>

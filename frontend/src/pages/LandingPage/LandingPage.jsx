@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom'
-import { IoArrowDown } from 'react-icons/io5'
+import { IoChevronDown } from 'react-icons/io5'
 import trustShield from '../../assets/trust-shield.png'
 
 function LandingPage() {
@@ -43,7 +43,7 @@ function LandingPage() {
         </section>
 
         <div className="landing-next" aria-hidden="true">
-          <IoArrowDown />
+          <IoChevronDown />
         </div>
       </div>
     </main>
