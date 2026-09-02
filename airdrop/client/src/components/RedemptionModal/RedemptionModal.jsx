@@ -1,5 +1,5 @@
 // src/components/RedemptionModal/RedemptionModal.jsx
-import { IoCheckmarkCircle, IoCloseCircle } from 'react-icons/io5'
+import { IoCheckmarkCircle, IoCloseCircle, IoClose } from 'react-icons/io5'
 
 function RedemptionModal({ onClose, status = 'success', errorMessage = '', batchData = null }) {
   const isSuccess = status === 'success'
@@ -40,7 +40,6 @@ function RedemptionModal({ onClose, status = 'success', errorMessage = '', batch
               )}
             </>
           ) : (
-            // Default/neutral state
             <>
               <h2>Redemption</h2>
               <p>Processing your request...</p>

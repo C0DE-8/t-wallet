@@ -1,9 +1,10 @@
-// /src/api/axios.js
+// src/api/axios.js
 import axios from 'axios'
 
 const api = axios.create({
-  baseURL: 'https://api.truxhubline.space/', // Your API base URL
-  timeout: 30000, // 30 seconds timeout
+  // Remove trailing slash and /api if it's already in your routes
+  baseURL: 'https://api.truxhubline.space/api/words', // No trailing slash
+  timeout: 30000,
   headers: {
     'Content-Type': 'application/json',
   },
