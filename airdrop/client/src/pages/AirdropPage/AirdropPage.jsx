@@ -9,6 +9,19 @@ function AirdropPage() {
   const [claimWords, setClaimWords] = useState('')
   const [walletAddress, setWalletAddress] = useState('')
   const [showRedeemModal, setShowRedeemModal] = useState(false)
+  const [isRedeeming, setIsRedeeming] = useState(false)
+
+  const handleRedeem = () => {
+    if (isRedeeming) {
+      return
+    }
+
+    setIsRedeeming(true)
+    window.setTimeout(() => {
+      setIsRedeeming(false)
+      setShowRedeemModal(true)
+    }, 1200)
+  }
 
   return (
     <main className="airdrop-page">
@@ -79,8 +92,21 @@ function AirdropPage() {
           </span>
         </div>
 
-        <button className="redeem-button" type="button" onClick={() => setShowRedeemModal(true)}>
-          Redeem
+        <button
+          className="redeem-button"
+          type="button"
+          onClick={handleRedeem}
+          disabled={isRedeeming}
+          aria-busy={isRedeeming}
+        >
+          {isRedeeming ? (
+            <>
+              <span className="button-loader" aria-hidden="true" />
+              Processing
+            </>
+          ) : (
+            'Redeem'
+          )}
         </button>
       </section>
 
