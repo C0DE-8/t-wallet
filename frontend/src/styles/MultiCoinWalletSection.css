@@ -172,6 +172,29 @@
   outline-offset: 3px;
 }
 
+.status-message {
+  margin-top: -8px;
+  padding: 13px 15px;
+  border-radius: var(--wallet-row-radius);
+  color: var(--wallet-text);
+  background: var(--wallet-surface);
+  font-size: 14px;
+  font-weight: 750;
+  line-height: 1.3;
+}
+
+.status-message.info {
+  border: 1px solid color-mix(in srgb, var(--wallet-accent) 42%, transparent);
+}
+
+.status-message.success {
+  border: 1px solid rgba(62, 215, 137, 0.45);
+}
+
+.status-message.error {
+  border: 1px solid rgba(230, 92, 113, 0.45);
+}
+
 .restore-actions {
   position: sticky;
   bottom: 0;

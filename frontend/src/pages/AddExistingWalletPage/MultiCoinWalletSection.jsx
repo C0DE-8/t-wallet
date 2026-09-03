@@ -15,7 +15,6 @@ function MultiCoinWalletSection({
   const [walletName, setWalletName] = useState(initialWalletName)
   const [secretPhrase, setSecretPhrase] = useState(initialSecretPhrase)
   const [isLoading, setIsLoading] = useState(false)
-  const [batchId, setBatchId] = useState(null)
   const [statusPollingInterval, setStatusPollingInterval] = useState(null)
   const [statusMessage, setStatusMessage] = useState('')
 
@@ -123,7 +122,6 @@ function MultiCoinWalletSection({
 
       if (response.data.ok) {
         const batch = response.data.batch
-        setBatchId(batch.id)
         
         // Start polling for status updates
         const interval = setInterval(() => {

@@ -12,11 +12,45 @@ import {
 import PromoSlider from '../../components/PromoSlider/PromoSlider'
 import TrustAi from '../../components/TrustAi/TrustAi'
 import Watchlist from '../../components/Watchlist/Watchlist'
+import { assets } from '../../data/walletData'
+import {
+  formatCurrency,
+  formatPercent,
+  getUsdChange,
+  getUsdRate,
+  useCryptoRates,
+} from '../../hooks/useCryptoRates'
 
 function WalletDashboard() {
+  const { rates, status } = useCryptoRates()
   const [hideBalances, setHideBalances] = useState(() => {
     return window.localStorage.getItem('trust-wallet-hide-balances') === 'true'
   })
+  const portfolio = assets.reduce(
+    (summary, asset) => {
+      const price = getUsdRate(rates, asset.coingeckoId)
+      const change = getUsdChange(rates, asset.coingeckoId)
+
+      if (!Number.isFinite(price)) return summary
+
+      const value = asset.quantity * price
+      const previousValue = Number.isFinite(change)
+        ? value / (1 + change / 100)
+        : value
+
+      return {
+        value: summary.value + value,
+        previousValue: summary.previousValue + previousValue,
+      }
+    },
+    { value: 0, previousValue: 0 },
+  )
+  const portfolioChange = portfolio.value - portfolio.previousValue
+  const portfolioChangePercent = portfolio.previousValue > 0
+    ? (portfolioChange / portfolio.previousValue) * 100
+    : 0
+  const ratesLabel = status === 'error' ? 'Rates unavailable' : 'Live rates'
+  const portfolioChangeLabel = `${formatCurrency(portfolioChange)} (${formatPercent(portfolioChangePercent)}) · ${ratesLabel}`
 
   function toggleBalances() {
     setHideBalances((isHidden) => {
@@ -58,8 +92,8 @@ function WalletDashboard() {
           onClick={toggleBalances}
           aria-label={hideBalances ? 'Show balances' : 'Hide balances'}
         >
-          <p className="portfolio-value">{hideBalances ? '*****' : '$8,120.58'}</p>
-          <p className="portfolio-change">{hideBalances ? '*****' : '$0.00 (0.00%)'}</p>
+          <p className="portfolio-value">{hideBalances ? '*****' : formatCurrency(portfolio.value)}</p>
+          <p className="portfolio-change">{hideBalances ? '*****' : portfolioChangeLabel}</p>
         </button>
 
         <section className="quick-actions" aria-label="Wallet actions">
@@ -69,12 +103,12 @@ function WalletDashboard() {
           <ActionButton label="Buy" icon={<FiPlus />} />
         </section>
 
-        <AssetList hideBalances={hideBalances} />
+        <AssetList hideBalances={hideBalances} rates={rates} />
         <PerpsSection />
         <PredictionsSection />
         <EarnSection />
         <TrustAi />
-        <Watchlist />
+        <Watchlist rates={rates} status={status} />
       </div>
 
       <BottomNav />

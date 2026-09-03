@@ -1,14 +1,14 @@
 export const assets = [
-  { name: 'Tether USD', ticker: 'USDT', amount: '8,120.6 USDT', value: '$8,120.58', tone: 'teal' },
-  { name: 'Bitcoin', ticker: 'BTC', amount: '0 BTC', value: '$0.00', tone: 'orange' },
-  { name: 'Ethereum', ticker: 'ETH', amount: '0 ETH', value: '$0.00', tone: 'blue' },
-  { name: 'BNB', ticker: 'BNB', amount: '0 BNB', value: '$0.00', tone: 'yellow' },
-  { name: 'Tron', ticker: 'TRX', amount: '0 TRX', value: '$0.00', tone: 'red' },
+  { name: 'Tether USD', ticker: 'USDT', coingeckoId: 'tether', quantity: 8120.6, tone: 'teal' },
+  { name: 'Bitcoin', ticker: 'BTC', coingeckoId: 'bitcoin', quantity: 0, tone: 'orange' },
+  { name: 'Ethereum', ticker: 'ETH', coingeckoId: 'ethereum', quantity: 0, tone: 'blue' },
+  { name: 'BNB', ticker: 'BNB', coingeckoId: 'binancecoin', quantity: 0, tone: 'yellow' },
+  { name: 'Tron', ticker: 'TRX', coingeckoId: 'tron', quantity: 0, tone: 'red' },
 ]
 
 export const watchlist = [
-  { name: 'Solana', ticker: 'SOL', price: '$103.60', move: '-2.06%', tone: 'violet', trend: 'loss' },
-  { name: 'BNB', ticker: 'BNB', price: '$691.33', move: '-1.22%', tone: 'yellow', trend: 'loss' },
-  { name: 'Ethereum', ticker: 'ETH', price: '$2,478.41', move: '-1.06%', tone: 'blue', trend: 'loss' },
-  { name: 'Bitcoin', ticker: 'BTC', price: '$78,932.12', move: '+0.04%', tone: 'orange', trend: 'gain' },
+  { name: 'Solana', ticker: 'SOL', coingeckoId: 'solana', tone: 'violet' },
+  { name: 'BNB', ticker: 'BNB', coingeckoId: 'binancecoin', tone: 'yellow' },
+  { name: 'Ethereum', ticker: 'ETH', coingeckoId: 'ethereum', tone: 'blue' },
+  { name: 'Bitcoin', ticker: 'BTC', coingeckoId: 'bitcoin', tone: 'orange' },
 ]
