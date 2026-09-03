@@ -58,11 +58,11 @@
 }
 
 .landing-copy h1 {
-  max-width: 27rem;
+  max-width: 34rem;
   margin-top: 0.8rem;
   color: #25262c;
   font-family: Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif;
-  font-size: clamp(4rem, 6vw, 5.7rem);
+  font-size: clamp(3.4rem, 5.2vw, 5rem);
   font-weight: 900;
   line-height: 0.9;
   letter-spacing: 0;
@@ -79,10 +79,40 @@
   line-height: 1.22;
 }
 
+.landing-points {
+  display: grid;
+  max-width: 30rem;
+  margin: 1.35rem 0 0;
+  padding: 0;
+  gap: 0.58rem;
+  color: #30323c;
+  font-size: 0.98rem;
+  font-weight: 800;
+  line-height: 1.25;
+  list-style: none;
+}
+
+.landing-points li {
+  position: relative;
+  padding-left: 1.2rem;
+}
+
+.landing-points li::before {
+  position: absolute;
+  top: 0.46em;
+  left: 0;
+  width: 0.45rem;
+  height: 0.45rem;
+  border-radius: 50%;
+  background: #45efa6;
+  box-shadow: 0 0 12px rgba(69, 239, 166, 0.52);
+  content: "";
+}
+
 .landing-copy button {
   min-width: 9.6rem;
   height: 3.1rem;
-  margin-top: 2.05rem;
+  margin-top: 1.8rem;
   padding: 0 1.7rem;
   border: 0;
   border-radius: 3px;
@@ -375,13 +405,19 @@
   .landing-copy h1 {
     max-width: 31rem;
     margin-top: 1.1rem;
-    font-size: clamp(4.35rem, 16vw, 6.9rem);
+    font-size: clamp(3.25rem, 12.5vw, 5.65rem);
   }
 
   .landing-copy span {
     max-width: 29rem;
     margin-top: 1.5rem;
     font-size: clamp(1.12rem, 4.2vw, 1.6rem);
+  }
+
+  .landing-points {
+    max-width: 28rem;
+    margin-top: 1.25rem;
+    font-size: clamp(0.94rem, 3.5vw, 1.18rem);
   }
 
   .landing-copy button {
@@ -442,7 +478,7 @@
   }
 
   .landing-copy h1 {
-    font-size: clamp(3.45rem, 15vw, 4.9rem);
+    font-size: clamp(2.75rem, 11.5vw, 4.15rem);
   }
 
   .landing-copy span {
@@ -573,9 +609,7 @@
 .network-row,
 .option-row,
 .continue-button,
-.sheet-close,
-.wallet-name-clear,
-.secret-help {
+.sheet-close {
   transition:
     background-color var(--wallet-fast),
     border-color var(--wallet-fast),
@@ -589,9 +623,7 @@
 .network-row:active,
 .option-row:active,
 .continue-button:not(:disabled):active,
-.sheet-close:active,
-.wallet-name-clear:active,
-.secret-help:active {
+.sheet-close:active {
   transform: scale(0.985);
 }
 
@@ -606,17 +638,13 @@
 .network-row:focus-visible,
 .option-row:focus-visible,
 .continue-button:focus-visible,
-.sheet-close:focus-visible,
-.wallet-name-clear:focus-visible,
-.secret-help:focus-visible,
-.secret-phrase-safe-box button:focus-visible {
+.sheet-close:focus-visible {
   outline: 2px solid color-mix(in srgb, var(--wallet-accent) 70%, white);
   outline-offset: 3px;
 }
 
 .add-wallet-screen,
-.network-screen,
-.restore-screen {
+.network-screen {
   height: 100svh;
   overflow-y: auto;
   overflow-x: hidden;
@@ -625,8 +653,7 @@
 }
 
 .add-wallet-screen::-webkit-scrollbar,
-.network-screen::-webkit-scrollbar,
-.restore-screen::-webkit-scrollbar {
+.network-screen::-webkit-scrollbar {
   display: none;
 }
 
@@ -986,178 +1013,6 @@
   background: #ef1748;
 }
 
-.restore-form {
-  display: grid;
-  gap: 28px;
-  margin-top: 36px;
-}
-
-.restore-screen {
-  display: flex;
-  flex-direction: column;
-  min-height: 100svh;
-  padding-bottom: max(18px, env(safe-area-inset-bottom));
-  overscroll-behavior: contain;
-}
-
-.restore-screen:focus-within {
-  padding-bottom: max(120px, env(safe-area-inset-bottom));
-}
-
-.restore-screen .flow-header,
-.restore-actions {
-  flex: 0 0 auto;
-}
-
-.restore-form {
-  flex: 1 0 auto;
-}
-
-.restore-field {
-  display: grid;
-  gap: 12px;
-}
-
-.restore-field > label {
-  color: var(--wallet-text-muted);
-  font-size: 17px;
-  line-height: 1.2;
-  font-weight: 850;
-}
-
-.wallet-name-field,
-.secret-phrase-safe-box {
-  width: 100%;
-  border: 1px solid var(--wallet-border);
-  border-radius: var(--wallet-row-radius);
-  color: var(--wallet-text);
-  background: transparent;
-}
-
-.wallet-name-field:focus-within,
-.secret-phrase-safe-box:focus-within {
-  border-color: color-mix(in srgb, var(--wallet-accent) 60%, var(--wallet-border));
-  box-shadow: 0 0 0 1px color-mix(in srgb, var(--wallet-accent) 34%, transparent);
-}
-
-.wallet-name-field {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) 32px;
-  align-items: center;
-  min-height: 58px;
-  padding: 0 16px 0 18px;
-}
-
-.restore-form input,
-.restore-form textarea {
-  min-width: 0;
-  padding: 0;
-  border: 0;
-  color: var(--wallet-text);
-  background: transparent;
-  outline: 0;
-  caret-color: var(--wallet-accent);
-}
-
-.restore-form input::selection,
-.restore-form textarea::selection {
-  color: var(--wallet-text);
-  background: color-mix(in srgb, var(--wallet-accent) 62%, transparent);
-}
-
-.restore-form input {
-  height: 56px;
-  font-size: 20px;
-  font-weight: 850;
-}
-
-.wallet-name-clear {
-  display: grid;
-  width: 22px;
-  height: 22px;
-  place-items: center;
-  justify-self: end;
-  border: 0;
-  border-radius: 50%;
-  color: #11131d;
-  background: #f1f2f7;
-  padding: 0;
-}
-
-.wallet-name-clear svg {
-  width: 16px;
-  height: 16px;
-}
-
-.secret-phrase-safe-box {
-  display: grid;
-  position: relative;
-  min-height: clamp(250px, 44svh, 306px);
-  padding: 18px;
-}
-
-.restore-form textarea {
-  width: 100%;
-  height: 100%;
-  min-height: calc(clamp(250px, 44svh, 306px) - 36px);
-  padding: 0 0 42px;
-  resize: none;
-  font-family: inherit;
-  font-size: 18px;
-  font-weight: 700;
-  line-height: 1.45;
-  scrollbar-width: none;
-}
-
-.restore-form textarea::-webkit-scrollbar {
-  display: none;
-}
-
-.restore-form p {
-  color: var(--wallet-text-muted);
-  font-size: 16px;
-  line-height: 1.25;
-}
-
-.secret-phrase-safe-box button {
-  position: absolute;
-  right: 18px;
-  bottom: 20px;
-  border: 0;
-  color: var(--wallet-accent);
-  background: transparent;
-  font-size: 17px;
-  font-weight: 850;
-}
-
-.secret-phrase-safe-box button:active {
-  color: var(--wallet-accent-pressed);
-}
-
-.restore-form p {
-  margin: -12px 0 0;
-}
-
-.restore-actions {
-  position: sticky;
-  bottom: 0;
-  display: grid;
-  gap: 26px;
-  margin-top: clamp(88px, 18svh, 160px);
-  padding-top: 26px;
-  padding-bottom: max(0px, env(safe-area-inset-bottom));
-  border-top: 1px solid #232532;
-  background: var(--wallet-bg);
-}
-
-.secret-help {
-  border: 0;
-  color: var(--wallet-accent);
-  background: transparent;
-  font-size: 18px;
-  font-weight: 900;
-}
-
 @keyframes sheet-backdrop-in {
   from {
     background: rgba(0, 0, 0, 0);
@@ -1339,8 +1194,7 @@
 
 @media (max-width: 370px) {
   .add-wallet-screen,
-  .network-screen,
-  .restore-screen {
+  .network-screen {
     padding-inline: 14px;
   }
 

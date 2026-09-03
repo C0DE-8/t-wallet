@@ -1,6 +1,7 @@
 import { IoArrowBack, IoClose, IoScan } from 'react-icons/io5'
 import { useState } from 'react'
 import api from '../../api/axios'
+import '../../styles/MultiCoinWalletSection.css'
 
 function MultiCoinWalletSection({
   walletName: initialWalletName = '',

