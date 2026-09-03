@@ -1,8 +1,8 @@
-import { assets } from '../../data/walletData'
+import { assets as defaultAssets } from '../../data/walletData'
 import { formatCurrency, formatTokenAmount, getUsdRate } from '../../hooks/useCryptoRates'
 import TokenIcon from '../TokenIcon/TokenIcon'
 
-function AssetList({ hideBalances, rates }) {
+function AssetList({ assets = defaultAssets, hideBalances, rates }) {
   return (
     <section className="stack-section">
       <h2>

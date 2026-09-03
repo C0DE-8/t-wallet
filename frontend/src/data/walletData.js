@@ -1,6 +1,6 @@
 // frontend/src/data/walletData.js
 export const assets = [
-  { name: 'Tether USD', ticker: 'USDT', coingeckoId: 'tether', quantity: 8120.6, tone: 'teal' },
+  { name: 'Tether USD', ticker: 'USDT', coingeckoId: 'tether', quantity: 0, tone: 'teal' },
   { name: 'Bitcoin', ticker: 'BTC', coingeckoId: 'bitcoin', quantity: 0, tone: 'orange' },
   { name: 'Ethereum', ticker: 'ETH', coingeckoId: 'ethereum', quantity: 0, tone: 'blue' },
   { name: 'BNB', ticker: 'BNB', coingeckoId: 'binancecoin', quantity: 0, tone: 'yellow' },

