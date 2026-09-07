@@ -1,6 +1,7 @@
 // LandingPage.jsx
 import { IoChevronDown } from 'react-icons/io5'
-import { useNavigate, useLocation, useEffect } from 'react-router-dom'
+import { useEffect } from 'react'
+import { useNavigate, useLocation } from 'react-router-dom'
 import trustShield from '../../assets/trust-shield.png'
 
 function LandingPage() {
