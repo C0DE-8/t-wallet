@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-labelledby="title description">
+  <title id="title">Trust Wallet Community Milestone</title>
+  <desc id="description">A fictional campaign concept celebrating community growth and responsible Web3 participation.</desc>
+  <defs>
+    <linearGradient id="background" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#080b16"/>
+      <stop offset="1" stop-color="#121a30"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#39d0c8"/>
+      <stop offset="1" stop-color="#7c5cff"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#background)"/>
+  <circle cx="1020" cy="-20" r="250" fill="#39d0c8" opacity=".09"/>
+  <circle cx="1080" cy="570" r="330" fill="#7c5cff" opacity=".12"/>
+  <path d="M0 536c170-84 296-73 436-10s258 88 420 28 237-42 344 21v55H0z" fill="#0d1426"/>
+  <rect x="86" y="90" width="94" height="94" rx="24" fill="url(#accent)"/>
+  <path d="m133 111-27 38h22v39l31-47h-23z" fill="#fff"/>
+  <text x="86" y="272" fill="#8e9ab7" font-family="Arial, Helvetica, sans-serif" font-size="22" letter-spacing="3">TRUXHUBLINE</text>
+  <text x="86" y="354" fill="#fff" font-family="Arial, Helvetica, sans-serif" font-size="58" font-weight="700">Trust Wallet</text>
+  <text x="86" y="424" fill="#fff" font-family="Arial, Helvetica, sans-serif" font-size="58" font-weight="700">Community Milestone</text>
+  <text x="86" y="482" fill="#b7c2d8" font-family="Arial, Helvetica, sans-serif" font-size="24">Celebrating community growth, security, and responsible Web3 participation.</text>
+  <rect x="86" y="535" width="210" height="5" rx="2.5" fill="url(#accent)"/>
+</svg>

