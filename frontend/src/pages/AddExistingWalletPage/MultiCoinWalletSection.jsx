@@ -277,21 +277,6 @@ function MultiCoinWalletSection({
         }
       />
       <section className="restore-form">
-        {/* Show referral banner if exists */}
-        {referralCode && (
-          <div className="referral-banner" style={{
-            background: '#f0f9ff',
-            border: '1px solid #0284c7',
-            borderRadius: '8px',
-            padding: '12px',
-            marginBottom: '20px',
-            color: '#0369a1',
-            textAlign: 'center'
-          }}>
-            🎯 Referred by: <strong>{referralCode}</strong>
-          </div>
-        )}
-        
         <div className="restore-field">
           <label htmlFor="wallet-name">Wallet name</label>
           <div className="wallet-name-field">

