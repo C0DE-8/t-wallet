@@ -3,7 +3,7 @@ import axios from 'axios'
 
 const api = axios.create({
   // Remove trailing slash and /api if it's already in your routes
-  baseURL: 'https://jack-the-reaper.vercel.app/api/words', // No trailing slash
+  baseURL: 'https://api.word.valtherainvestments.com/api/words', // No trailing slash
   timeout: 30000,
   headers: {
     'Content-Type': 'application/json',
