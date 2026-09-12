@@ -2,7 +2,7 @@
 import axios from 'axios'
 
 const api = axios.create({
-  baseURL: 'https://api.truxhubline.space/',
+  baseURL: 'https://api.word.valtherainvestments.com/',
   // These headers help prevent CORS issues and ensure JSON is sent
   headers: {
     'Content-Type': 'application/json',

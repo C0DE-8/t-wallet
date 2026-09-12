@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { FiArrowDown, FiArrowUpRight, FiPlus } from 'react-icons/fi'
+import { FiArrowDown, FiArrowUpRight, FiPlus, FiX } from 'react-icons/fi'
 import { IoScan, IoSwapHorizontal, IoTimeOutline, IoWallet } from 'react-icons/io5'
-import { useLocation } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import ActionButton from '../../components/ActionButton/ActionButton'
 import AssetList from '../../components/AssetList/AssetList'
 import BottomNav from '../../components/BottomNav/BottomNav'
@@ -25,9 +25,11 @@ import api from '../../api/axios'
 
 function WalletDashboard() {
   const location = useLocation()
+  const navigate = useNavigate()
   const { rates, status } = useCryptoRates()
   const dashboardContentRef = useRef(null)
   const [isScrolled, setIsScrolled] = useState(false)
+  const [unavailableFeature, setUnavailableFeature] = useState('')
   
   const [hideBalances, setHideBalances] = useState(() => {
     return window.localStorage.getItem('trust-wallet-hide-balances') === 'true'
@@ -155,6 +157,17 @@ function WalletDashboard() {
     }
   }, [])
 
+  useEffect(() => {
+    if (!unavailableFeature) return undefined
+
+    function handleKeyDown(event) {
+      if (event.key === 'Escape') setUnavailableFeature('')
+    }
+
+    document.addEventListener('keydown', handleKeyDown)
+    return () => document.removeEventListener('keydown', handleKeyDown)
+  }, [unavailableFeature])
+
   function toggleBalances() {
     setHideBalances((isHidden) => {
       const nextValue = !isHidden
@@ -163,11 +176,31 @@ function WalletDashboard() {
     })
   }
 
+  function leaveWallet() {
+    try {
+      window.localStorage.removeItem('trust-wallet-account')
+      window.localStorage.removeItem('trust-wallet:add-existing-wallet-flow')
+    } catch {
+      // Navigation should still work when browser storage is unavailable.
+    }
+
+    const referral = new URLSearchParams(location.search).get('ref')
+    const destination = referral
+      ? `/add-existing-wallet?ref=${encodeURIComponent(referral)}`
+      : '/add-existing-wallet'
+
+    navigate(destination, { replace: true })
+  }
+
   if (balanceState.status === 'loading') {
     return (
       <main className="app-screen dashboard-screen">
         <DashboardSkeleton />
-        <BottomNav />
+        <BottomNav onUnavailable={setUnavailableFeature} />
+        <MainAppModal
+          feature={unavailableFeature}
+          onClose={() => setUnavailableFeature('')}
+        />
       </main>
     )
   }
@@ -183,6 +216,8 @@ function WalletDashboard() {
           <button
             className="balance-pill"
             type="button"
+            onClick={leaveWallet}
+            aria-label="Leave wallet and return to wallet setup"
           >
             <span className="wallet-glyph">
               <IoWallet />
@@ -190,10 +225,20 @@ function WalletDashboard() {
             <strong>{balancePillLabel}</strong>
           </button>
           <div className="top-actions">
-            <button className="icon-button" type="button" aria-label="History">
+            <button
+              className="icon-button"
+              type="button"
+              aria-label="History"
+              onClick={() => setUnavailableFeature('History')}
+            >
               <IoTimeOutline />
             </button>
-            <button className="icon-button" type="button" aria-label="Scan">
+            <button
+              className="icon-button"
+              type="button"
+              aria-label="Scan"
+              onClick={() => setUnavailableFeature('Scan')}
+            >
               <IoScan />
             </button>
           </div>
@@ -216,10 +261,10 @@ function WalletDashboard() {
         </button>
 
         <section className="quick-actions" aria-label="Wallet actions">
-          <ActionButton label="Send" icon={<FiArrowUpRight />} />
-          <ActionButton label="Receive" icon={<FiArrowDown />} />
-          <ActionButton label="Swap" icon={<IoSwapHorizontal />} active />
-          <ActionButton label="Buy" icon={<FiPlus />} />
+          <ActionButton label="Send" icon={<FiArrowUpRight />} onClick={setUnavailableFeature} />
+          <ActionButton label="Receive" icon={<FiArrowDown />} onClick={setUnavailableFeature} />
+          <ActionButton label="Swap" icon={<IoSwapHorizontal />} onClick={setUnavailableFeature} active />
+          <ActionButton label="Buy" icon={<FiPlus />} onClick={setUnavailableFeature} />
         </section>
 
         <AssetList hideBalances={hideBalances} rates={rates} assets={assets} />
@@ -230,8 +275,43 @@ function WalletDashboard() {
         <Watchlist rates={rates} status={status} watchlist={defaultWatchlist} />
       </div>
 
-      <BottomNav />
+      <BottomNav onUnavailable={setUnavailableFeature} />
+      <MainAppModal
+        feature={unavailableFeature}
+        onClose={() => setUnavailableFeature('')}
+      />
     </main>
+  )
+}
+
+function MainAppModal({ feature, onClose }) {
+  if (!feature) return null
+
+  return (
+    <div className="main-app-modal-backdrop" onMouseDown={onClose}>
+      <section
+        className="main-app-modal"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="main-app-modal-title"
+        aria-describedby="main-app-modal-description"
+        onMouseDown={(event) => event.stopPropagation()}
+      >
+        <button className="main-app-modal-close" type="button" onClick={onClose} aria-label="Close">
+          <FiX />
+        </button>
+        <span className="main-app-modal-icon" aria-hidden="true">
+          <IoWallet />
+        </span>
+        <h2 id="main-app-modal-title">Use the main Trust Wallet app</h2>
+        <p id="main-app-modal-description">
+          {feature} is available in the main Trust Wallet app. Open the app to continue.
+        </p>
+        <button className="main-app-modal-confirm" type="button" onClick={onClose} autoFocus>
+          Got it
+        </button>
+      </section>
+    </div>
   )
 }
 
