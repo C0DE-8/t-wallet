@@ -29,6 +29,150 @@
   background: #f5f5fb;
 }
 
+.captcha-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: grid;
+  place-items: center;
+  padding: 1.25rem;
+  background: rgba(12, 13, 24, 0.68);
+  backdrop-filter: blur(12px);
+}
+
+.captcha-card {
+  width: min(100%, 28rem);
+  padding: clamp(1.5rem, 5vw, 2.2rem);
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  border-radius: 1.25rem;
+  color: #25262c;
+  background: rgba(255, 255, 255, 0.96);
+  box-shadow: 0 1.5rem 5rem rgba(0, 0, 0, 0.32);
+}
+
+.captcha-badge {
+  display: grid;
+  width: 3rem;
+  height: 3rem;
+  place-items: center;
+  border-radius: 0.9rem;
+  color: #fff;
+  background: #5141ff;
+  box-shadow: 0 0.7rem 1.5rem rgba(81, 65, 255, 0.25);
+  font-size: 1.35rem;
+  font-weight: 900;
+}
+
+.captcha-card .captcha-eyebrow {
+  margin: 1.25rem 0 0.35rem;
+  color: #6556ff;
+  font-size: 0.75rem;
+  font-weight: 900;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+}
+
+.captcha-card h2 {
+  margin: 0;
+  font-size: clamp(1.6rem, 6vw, 2rem);
+  line-height: 1.1;
+}
+
+.captcha-card > p:not(.captcha-eyebrow) {
+  margin: 0.8rem 0 1.5rem;
+  color: #656773;
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+.captcha-card label {
+  display: block;
+  margin-bottom: 0.55rem;
+  color: #30313a;
+  font-size: 0.95rem;
+  font-weight: 800;
+}
+
+.captcha-answer-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 0.65rem;
+}
+
+.captcha-answer-row input {
+  min-width: 0;
+  height: 3.15rem;
+  padding: 0 0.9rem;
+  border: 2px solid #dddde8;
+  border-radius: 0.65rem;
+  color: #24252b;
+  background: #fff;
+  font: inherit;
+  font-size: 1rem;
+  outline: none;
+}
+
+.captcha-answer-row input:focus {
+  border-color: #5141ff;
+  box-shadow: 0 0 0 3px rgba(81, 65, 255, 0.14);
+}
+
+.captcha-answer-row input[aria-invalid="true"] {
+  border-color: #d84040;
+}
+
+.captcha-refresh {
+  padding: 0 0.9rem;
+  border: 1px solid #d9d9e5;
+  border-radius: 0.65rem;
+  color: #494b56;
+  background: #f4f4fa;
+  font-weight: 800;
+}
+
+.captcha-error {
+  min-height: 1.25rem;
+  margin: 0.45rem 0 0;
+  color: #c52d2d;
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
+.captcha-submit {
+  width: 100%;
+  height: 3.15rem;
+  margin-top: 0.45rem;
+  border: 0;
+  border-radius: 0.65rem;
+  color: #fff;
+  background: #5141ff;
+  box-shadow: 0 0.7rem 1.5rem rgba(81, 65, 255, 0.25);
+  font: inherit;
+  font-weight: 900;
+}
+
+.captcha-submit:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+  box-shadow: none;
+}
+
+.captcha-refresh:focus-visible,
+.captcha-submit:focus-visible {
+  outline: 3px solid #fff257;
+  outline-offset: 3px;
+}
+
+@media (max-width: 430px) {
+  .captcha-answer-row {
+    grid-template-columns: 1fr;
+  }
+
+  .captcha-refresh {
+    height: 2.7rem;
+  }
+}
+
 .landing-stage {
   position: relative;
   min-height: 100svh;
