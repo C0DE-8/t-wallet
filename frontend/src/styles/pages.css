@@ -1345,6 +1345,205 @@
   font-weight: 850;
 }
 
+.dashboard-alert-backdrop {
+  position: absolute;
+  inset: 0;
+  z-index: 90;
+  display: grid;
+  place-items: center;
+  padding: 20px;
+  background: rgba(3, 4, 10, 0.76);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  animation: alert-backdrop-in 180ms ease-out;
+}
+
+.dashboard-alert {
+  --alert-color: #7065ff;
+  --alert-soft: rgba(112, 101, 255, 0.16);
+  position: relative;
+  isolation: isolate;
+  width: min(100%, 390px);
+  overflow: hidden;
+  padding: 30px 24px 22px;
+  border: 1px solid color-mix(in srgb, var(--alert-color) 42%, #34394f);
+  border-radius: 28px;
+  color: #fff;
+  background: linear-gradient(145deg, #1d2030 0%, #11131d 68%);
+  box-shadow: 0 30px 90px rgba(0, 0, 0, 0.58);
+  animation: alert-card-in 260ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.dashboard-alert--success {
+  --alert-color: #36d98b;
+  --alert-soft: rgba(54, 217, 139, 0.15);
+}
+
+.dashboard-alert--warning {
+  --alert-color: #ffbd3e;
+  --alert-soft: rgba(255, 189, 62, 0.15);
+}
+
+.dashboard-alert--error {
+  --alert-color: #ff5f6d;
+  --alert-soft: rgba(255, 95, 109, 0.16);
+}
+
+.dashboard-alert-glow {
+  position: absolute;
+  z-index: -1;
+  top: -110px;
+  left: -80px;
+  width: 260px;
+  height: 230px;
+  border-radius: 50%;
+  background: var(--alert-color);
+  opacity: 0.13;
+  filter: blur(40px);
+}
+
+.dashboard-alert-close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  display: grid;
+  width: 38px;
+  height: 38px;
+  place-items: center;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 50%;
+  color: #b9bdca;
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.dashboard-alert-icon {
+  display: grid;
+  width: 58px;
+  height: 58px;
+  margin-bottom: 20px;
+  place-items: center;
+  border: 1px solid color-mix(in srgb, var(--alert-color) 50%, transparent);
+  border-radius: 19px;
+  color: var(--alert-color);
+  background: var(--alert-soft);
+  box-shadow: 0 12px 35px var(--alert-soft);
+}
+
+.dashboard-alert-icon svg {
+  width: 29px;
+  height: 29px;
+}
+
+.dashboard-alert-label {
+  margin: 0 0 7px;
+  color: var(--alert-color);
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+}
+
+.dashboard-alert h2 {
+  margin: 0;
+  padding-right: 28px;
+  font-size: 24px;
+  line-height: 1.2;
+}
+
+.dashboard-alert-message {
+  margin: 12px 0 0;
+  color: #b7bac7;
+  font-size: 14px;
+  line-height: 1.58;
+  white-space: pre-wrap;
+}
+
+.dashboard-alert-date {
+  display: block;
+  margin-top: 15px;
+  color: #747988;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.dashboard-alert-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-top: 25px;
+}
+
+.dashboard-alert-pagination {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #8e92a1;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.dashboard-alert-pagination button {
+  display: grid;
+  width: 34px;
+  height: 34px;
+  place-items: center;
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-radius: 11px;
+  color: #fff;
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.dashboard-alert-confirm {
+  min-width: 92px;
+  height: 44px;
+  padding: 0 20px;
+  border: 0;
+  border-radius: 13px;
+  color: #0c0d13;
+  background: var(--alert-color);
+  font: inherit;
+  font-size: 14px;
+  font-weight: 900;
+  box-shadow: 0 10px 28px var(--alert-soft);
+}
+
+.dashboard-alert button:focus-visible {
+  outline: 3px solid #fff;
+  outline-offset: 3px;
+}
+
+@keyframes alert-backdrop-in {
+  from { opacity: 0; }
+}
+
+@keyframes alert-card-in {
+  from {
+    opacity: 0;
+    transform: translateY(18px) scale(0.97);
+  }
+}
+
+@media (max-width: 370px) {
+  .dashboard-alert {
+    padding: 26px 20px 20px;
+    border-radius: 24px;
+  }
+
+  .dashboard-alert-footer {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .dashboard-alert-pagination {
+    justify-content: space-between;
+  }
+
+  .dashboard-alert-confirm {
+    width: 100%;
+  }
+}
+
 .main-app-modal-close:focus-visible,
 .main-app-modal-confirm:focus-visible {
   outline: 3px solid #fff;

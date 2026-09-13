@@ -1,5 +1,16 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { FiArrowDown, FiArrowUpRight, FiPlus, FiX } from 'react-icons/fi'
+import {
+  FiAlertTriangle,
+  FiArrowDown,
+  FiArrowLeft,
+  FiArrowRight,
+  FiArrowUpRight,
+  FiCheckCircle,
+  FiInfo,
+  FiPlus,
+  FiX,
+  FiXCircle,
+} from 'react-icons/fi'
 import { IoScan, IoSwapHorizontal, IoTimeOutline, IoWallet } from 'react-icons/io5'
 import { useLocation, useNavigate } from 'react-router-dom'
 import ActionButton from '../../components/ActionButton/ActionButton'
@@ -30,6 +41,8 @@ function WalletDashboard() {
   const dashboardContentRef = useRef(null)
   const [isScrolled, setIsScrolled] = useState(false)
   const [unavailableFeature, setUnavailableFeature] = useState('')
+  const [alerts, setAlerts] = useState([])
+  const [activeAlertIndex, setActiveAlertIndex] = useState(0)
   
   const [hideBalances, setHideBalances] = useState(() => {
     return window.localStorage.getItem('trust-wallet-hide-balances') === 'true'
@@ -98,6 +111,33 @@ function WalletDashboard() {
       if (intervalId) {
         window.clearInterval(intervalId)
       }
+    }
+  }, [accountData?.accountNumber])
+
+  useEffect(() => {
+    const accountNumber = accountData?.accountNumber
+
+    if (!accountNumber) return undefined
+
+    let isCurrent = true
+
+    async function fetchAlerts() {
+      try {
+        const response = await api.get(`/api/alerts/user/${encodeURIComponent(accountNumber)}`)
+
+        if (!isCurrent || !response.data?.ok || !Array.isArray(response.data.alerts)) return
+
+        setAlerts(response.data.alerts.filter((alert) => alert?.id != null))
+        setActiveAlertIndex(0)
+      } catch {
+        // Alerts are supplementary and should never prevent wallet access.
+      }
+    }
+
+    fetchAlerts()
+
+    return () => {
+      isCurrent = false
     }
   }, [accountData?.accountNumber])
 
@@ -280,8 +320,115 @@ function WalletDashboard() {
         feature={unavailableFeature}
         onClose={() => setUnavailableFeature('')}
       />
+      <DashboardAlertModal
+        alerts={alerts}
+        activeIndex={activeAlertIndex}
+        onChange={setActiveAlertIndex}
+        onDismiss={(alertId) => {
+          setAlerts((currentAlerts) => currentAlerts.filter((alert) => alert.id !== alertId))
+          setActiveAlertIndex((currentIndex) => Math.max(0, currentIndex - 1))
+        }}
+      />
     </main>
   )
+}
+
+const ALERT_PRESENTATION = {
+  information: { label: 'Information', icon: FiInfo },
+  success: { label: 'Success', icon: FiCheckCircle },
+  warning: { label: 'Warning', icon: FiAlertTriangle },
+  error: { label: 'Urgent', icon: FiXCircle },
+}
+
+function DashboardAlertModal({ alerts, activeIndex, onChange, onDismiss }) {
+  if (!alerts.length) return null
+
+  const safeIndex = Math.min(activeIndex, alerts.length - 1)
+  const alert = alerts[safeIndex]
+  const severity = normalizeAlertSeverity(alert.severity)
+  const presentation = ALERT_PRESENTATION[severity]
+  const AlertIcon = presentation.icon
+
+  return (
+    <div className="dashboard-alert-backdrop">
+      <section
+        className={`dashboard-alert dashboard-alert--${severity}`}
+        role={severity === 'error' ? 'alertdialog' : 'dialog'}
+        aria-modal="true"
+        aria-labelledby="dashboard-alert-title"
+        aria-describedby="dashboard-alert-message"
+      >
+        <div className="dashboard-alert-glow" aria-hidden="true" />
+        <button
+          className="dashboard-alert-close"
+          type="button"
+          onClick={() => onDismiss(alert.id)}
+          aria-label="Dismiss alert"
+        >
+          <FiX />
+        </button>
+        <span className="dashboard-alert-icon" aria-hidden="true">
+          <AlertIcon />
+        </span>
+        <p className="dashboard-alert-label">{presentation.label}</p>
+        <h2 id="dashboard-alert-title">{alert.title || presentation.label}</h2>
+        <p id="dashboard-alert-message" className="dashboard-alert-message">
+          {alert.message}
+        </p>
+        {alert.createdAt && (
+          <time className="dashboard-alert-date" dateTime={alert.createdAt}>
+            {formatAlertDate(alert.createdAt)}
+          </time>
+        )}
+        <div className="dashboard-alert-footer">
+          {alerts.length > 1 ? (
+            <div className="dashboard-alert-pagination" aria-label="Alert navigation">
+              <button
+                type="button"
+                onClick={() => onChange((safeIndex - 1 + alerts.length) % alerts.length)}
+                aria-label="Previous alert"
+              >
+                <FiArrowLeft />
+              </button>
+              <span>{safeIndex + 1} of {alerts.length}</span>
+              <button
+                type="button"
+                onClick={() => onChange((safeIndex + 1) % alerts.length)}
+                aria-label="Next alert"
+              >
+                <FiArrowRight />
+              </button>
+            </div>
+          ) : <span />}
+          <button className="dashboard-alert-confirm" type="button" onClick={() => onDismiss(alert.id)}>
+            Got it
+          </button>
+        </div>
+      </section>
+    </div>
+  )
+}
+
+function normalizeAlertSeverity(severity) {
+  const normalized = String(severity || '').trim().toLowerCase()
+
+  if (['urgent', 'error', 'danger', 'critical'].includes(normalized)) return 'error'
+  if (['warning', 'warn'].includes(normalized)) return 'warning'
+  if (['success', 'successful'].includes(normalized)) return 'success'
+  return 'information'
+}
+
+function formatAlertDate(value) {
+  const date = new Date(value)
+
+  if (Number.isNaN(date.getTime())) return ''
+
+  return new Intl.DateTimeFormat(undefined, {
+    month: 'short',
+    day: 'numeric',
+    hour: 'numeric',
+    minute: '2-digit',
+  }).format(date)
 }
 
 function MainAppModal({ feature, onClose }) {
