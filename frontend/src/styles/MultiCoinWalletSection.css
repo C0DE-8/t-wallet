@@ -236,6 +236,7 @@
   }
 }
 
+
 /* =========================================================
    AD VIDEO OVERLAY
    ========================================================= */
@@ -281,6 +282,55 @@
   }
 }
 
+/* =========================================================
+   VIDEO PLACEHOLDER (shown while the video loads)
+   ========================================================= */
+
+.video-placeholder {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  background: linear-gradient(135deg, #111 0%, #1a1a1a 100%);
+  color: #fff;
+  font-size: 14px;
+  font-weight: 500;
+  text-align: center;
+  padding: 20px;
+}
+
+.video-placeholder p {
+  margin: 0;
+  opacity: 0.85;
+}
+
+.video-placeholder.error {
+  background: linear-gradient(135deg, #1a0a0a 0%, #2a0f0f 100%);
+  color: #ff8a8a;
+}
+
+.video-placeholder-spinner {
+  width: 36px;
+  height: 36px;
+  border: 3px solid rgba(255, 255, 255, 0.18);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: adSpin 0.85s linear infinite;
+}
+
+@keyframes adSpin {
+  to { transform: rotate(360deg); }
+}
+
+/* =========================================================
+   THE VIDEO ITSELF
+   Fades in smoothly once it's ready
+   ========================================================= */
+
 .ad-video {
   display: block;
   width: 100%;
@@ -288,9 +338,35 @@
   max-height: 70vh;
   object-fit: contain;
   background: #000;
+  position: relative;
+  z-index: 2;
+  transition: opacity 0.4s ease;
 }
 
-/* Mute / Unmute button (top-right corner) */
+.ad-video.loading {
+  opacity: 0;
+}
+
+.ad-video.ready {
+  opacity: 1;
+  animation: videoFadeIn 0.5s ease forwards;
+}
+
+@keyframes videoFadeIn {
+  from {
+    opacity: 0;
+    filter: brightness(0.6);
+  }
+  to {
+    opacity: 1;
+    filter: brightness(1);
+  }
+}
+
+/* =========================================================
+   MUTE / UNMUTE BUTTON
+   ========================================================= */
+
 .ad-video-mute-btn {
   position: absolute;
   top: 12px;
@@ -309,7 +385,7 @@
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
   transition: background 0.2s ease, transform 0.15s ease;
-  z-index: 2;
+  z-index: 3;
 }
 
 .ad-video-mute-btn:hover {
@@ -321,7 +397,10 @@
   transform: scale(0.95);
 }
 
-/* Bottom loader overlay */
+/* =========================================================
+   BOTTOM LOADER (spinner + status text)
+   ========================================================= */
+
 .ad-video-loader {
   position: absolute;
   left: 0;
@@ -342,7 +421,7 @@
   text-align: center;
   font-size: 14px;
   font-weight: 500;
-  z-index: 2;
+  z-index: 3;
   pointer-events: none;
 }
 
@@ -368,16 +447,15 @@
   animation: adSpin 0.85s linear infinite;
 }
 
-@keyframes adSpin {
-  to { transform: rotate(360deg); }
-}
-
 /* Prevent page scroll behind the overlay */
 body:has(.ad-video-overlay) {
   overflow: hidden;
 }
 
-/* Responsive tweaks */
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
 @media (max-width: 480px) {
   .ad-video-container {
     max-width: 100%;
@@ -393,7 +471,8 @@ body:has(.ad-video-overlay) {
     font-size: 13px;
   }
 
-  .ad-spinner {
+  .ad-spinner,
+  .video-placeholder-spinner {
     width: 26px;
     height: 26px;
   }
@@ -403,14 +482,24 @@ body:has(.ad-video-overlay) {
     height: 36px;
     font-size: 18px;
   }
+
+  .video-placeholder {
+    font-size: 13px;
+  }
 }
 
-/* Reduced motion preference */
+/* =========================================================
+   REDUCED MOTION
+   ========================================================= */
+
 @media (prefers-reduced-motion: reduce) {
   .ad-video-container,
   .ad-video-overlay,
   .ad-spinner,
-  .ad-video-loader p {
+  .video-placeholder-spinner,
+  .ad-video-loader p,
+  .ad-video.ready {
     animation: none;
+    transition: none;
   }
 }

