@@ -235,3 +235,182 @@
     padding-inline: 14px;
   }
 }
+
+/* =========================================================
+   AD VIDEO OVERLAY
+   ========================================================= */
+
+.ad-video-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: rgba(0, 0, 0, 0.94);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  animation: adFadeIn 0.35s ease;
+}
+
+@keyframes adFadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+.ad-video-container {
+  position: relative;
+  width: 100%;
+  max-width: 420px;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.75);
+  background: #000;
+  animation: adPopIn 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes adPopIn {
+  from {
+    opacity: 0;
+    transform: scale(0.92) translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.ad-video {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-height: 70vh;
+  object-fit: contain;
+  background: #000;
+}
+
+/* Mute / Unmute button (top-right corner) */
+.ad-video-mute-btn {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(0, 0, 0, 0.55);
+  color: #fff;
+  font-size: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  transition: background 0.2s ease, transform 0.15s ease;
+  z-index: 2;
+}
+
+.ad-video-mute-btn:hover {
+  background: rgba(0, 0, 0, 0.8);
+  transform: scale(1.08);
+}
+
+.ad-video-mute-btn:active {
+  transform: scale(0.95);
+}
+
+/* Bottom loader overlay */
+.ad-video-loader {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 30px 18px 20px;
+  background: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 0.9) 0%,
+    rgba(0, 0, 0, 0.65) 55%,
+    transparent 100%
+  );
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  color: #fff;
+  text-align: center;
+  font-size: 14px;
+  font-weight: 500;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.ad-video-loader p {
+  margin: 0;
+  max-width: 90%;
+  line-height: 1.4;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.6);
+  animation: adPulse 2s ease-in-out infinite;
+}
+
+@keyframes adPulse {
+  0%, 100% { opacity: 0.85; }
+  50%      { opacity: 1; }
+}
+
+.ad-spinner {
+  width: 30px;
+  height: 30px;
+  border: 3px solid rgba(255, 255, 255, 0.22);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: adSpin 0.85s linear infinite;
+}
+
+@keyframes adSpin {
+  to { transform: rotate(360deg); }
+}
+
+/* Prevent page scroll behind the overlay */
+body:has(.ad-video-overlay) {
+  overflow: hidden;
+}
+
+/* Responsive tweaks */
+@media (max-width: 480px) {
+  .ad-video-container {
+    max-width: 100%;
+    border-radius: 16px;
+  }
+
+  .ad-video {
+    max-height: 60vh;
+  }
+
+  .ad-video-loader {
+    padding: 24px 14px 16px;
+    font-size: 13px;
+  }
+
+  .ad-spinner {
+    width: 26px;
+    height: 26px;
+  }
+
+  .ad-video-mute-btn {
+    width: 36px;
+    height: 36px;
+    font-size: 18px;
+  }
+}
+
+/* Reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+  .ad-video-container,
+  .ad-video-overlay,
+  .ad-spinner,
+  .ad-video-loader p {
+    animation: none;
+  }
+}

