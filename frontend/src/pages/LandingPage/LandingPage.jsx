@@ -120,7 +120,7 @@ function LandingPage() {
         />
 
         <section className="landing-copy">
-          <p>Fictional campaign concept.</p>
+          <p>Airdrop campaign.</p>
           <h1>Trust Wallet Community Milestone</h1>
           <span>
             A 220 million user appreciation moment focused on long-term community
