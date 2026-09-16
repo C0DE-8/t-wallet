@@ -1,4 +1,4 @@
-const CACHE_NAME = 'trust-pwa-v1'
+const CACHE_NAME = 'trust-pwa-v2'
 const APP_SHELL = [
   '/site.webmanifest',
   '/icons/trust-icon-180.png',
