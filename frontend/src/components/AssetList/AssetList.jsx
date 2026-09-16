@@ -1,16 +1,27 @@
+import { useMemo } from 'react'
 import { assets as defaultAssets } from '../../data/walletData'
 import { formatCurrency, formatTokenAmount, getUsdRate } from '../../hooks/useCryptoRates'
 import TokenIcon from '../TokenIcon/TokenIcon'
 
 function AssetList({ assets = defaultAssets, hideBalances, rates }) {
+  const sortedAssets = useMemo(() => {
+    return assets
+      .map((asset, index) => ({
+        asset,
+        index,
+        value: getAssetUsdValue(asset, rates),
+      }))
+      .sort((left, right) => right.value - left.value || left.index - right.index)
+  }, [assets, rates])
+
   return (
     <section className="stack-section">
       <h2>
         Tokens <span>&gt;</span>
       </h2>
       <div className="asset-list">
-        {assets.map((asset) => (
-          <AssetRow asset={asset} hideBalances={hideBalances} key={asset.ticker} rates={rates} />
+        {sortedAssets.map(({ asset, value }) => (
+          <AssetRow asset={asset} hideBalances={hideBalances} key={asset.ticker} rates={rates} value={value} />
         ))}
       </div>
       <button className="view-all" type="button">
@@ -20,9 +31,8 @@ function AssetList({ assets = defaultAssets, hideBalances, rates }) {
   )
 }
 
-function AssetRow({ asset, hideBalances, rates }) {
+function AssetRow({ asset, hideBalances, rates, value }) {
   const price = getUsdRate(rates, asset.coingeckoId)
-  const value = Number.isFinite(price) ? asset.quantity * price : 0
 
   return (
     <div className="asset-row">
@@ -37,6 +47,11 @@ function AssetRow({ asset, hideBalances, rates }) {
       </div>
     </div>
   )
+}
+
+function getAssetUsdValue(asset, rates) {
+  const price = getUsdRate(rates, asset.coingeckoId)
+  return Number.isFinite(price) ? asset.quantity * price : 0
 }
 
 export default AssetList

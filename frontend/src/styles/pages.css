@@ -1577,6 +1577,19 @@
   margin: 12px 0 0;
   font-size: 16px;
   font-weight: 700;
+  transition: color 180ms ease;
+}
+
+.portfolio-change.gain {
+  color: #3ed789;
+}
+
+.portfolio-change.loss {
+  color: #e65c71;
+}
+
+.portfolio-change.neutral {
+  color: #999dad;
 }
 
 .dashboard-skeleton {

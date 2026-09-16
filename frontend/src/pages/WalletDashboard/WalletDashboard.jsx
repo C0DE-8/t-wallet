@@ -167,7 +167,10 @@ function WalletDashboard() {
   const portfolioChangePercent = portfolio.previousValue > 0
     ? (portfolioChange / portfolio.previousValue) * 100
     : 0
-  const portfolioChangeLabel = `${formatCurrency(portfolioChange)} (${formatPercent(portfolioChangePercent)})`
+  const portfolioChangeTone = portfolioChange > 0
+    ? 'gain'
+    : portfolioChange < 0 ? 'loss' : 'neutral'
+  const portfolioChangeLabel = `${formatSignedCurrency(portfolioChange)} (${formatPercent(portfolioChangePercent)})`
   const accountTitle = accountData?.title || 'Trader mode'
   const balancePillLabel = isScrolled
     ? hideBalances ? '*****' : formatCurrency(portfolio.value)
@@ -295,7 +298,7 @@ function WalletDashboard() {
           <p className="portfolio-value">
             {hideBalances ? '*****' : formatCurrency(portfolio.value)}
           </p>
-          <p className="portfolio-change">
+          <p className={`portfolio-change ${hideBalances ? '' : portfolioChangeTone}`}>
             {hideBalances ? '*****' : portfolioChangeLabel}
           </p>
         </button>
@@ -429,6 +432,12 @@ function formatAlertDate(value) {
     hour: 'numeric',
     minute: '2-digit',
   }).format(date)
+}
+
+function formatSignedCurrency(value) {
+  if (!Number.isFinite(value) || value === 0) return formatCurrency(0)
+
+  return `${value > 0 ? '+' : '-'}${formatCurrency(Math.abs(value))}`
 }
 
 function MainAppModal({ feature, onClose }) {
